@@ -57,9 +57,6 @@
             overflow-y: auto;
             overflow-x: hidden;
             background-color: #f8fafc;
-            /* Fix 1: Ensure content can scroll under sticky headers */
-            /* Padding top/bottom is handled by header/nav height */
-            /* UPDATED: Added padding for fixed bottom nav clearance */
             padding-bottom: 70px;
         }
 
@@ -75,27 +72,19 @@
 
         /* --- 3. Reusable Components --- */
         
-        /* SOLUTION 1: Sticky Page Headers */
         .page-header,
         #page-home .home-header {
             position: sticky;
             top: 0;
             z-index: 10;
-            background-color: var(--bg-white); /* Default background */
+            background-color: var(--bg-white);
         }
         #page-home .home-header {
-             background-color: #f8fafc; /* Match app-main-content bg */
+             background-color: #f8fafc;
         }
         #page-profile .page-header {
             background-color: var(--bg-light);
         }
-        #page-join-channels .page-header {
-            background-color: var(--bg-white);
-        }
-        #page-tasks .page-header {
-            background-color: var(--bg-white);
-        }
-        /* End Solution 1 */
 
         .page-header {
             display: flex;
@@ -141,6 +130,13 @@
         .btn-primary { background-color: var(--primary-green); }
         .btn-secondary { background-color: var(--primary-blue); }
         .btn-red { background-color: var(--primary-red); }
+        
+        /* [NEW] Style for disabled buttons */
+        .btn:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
 
         .form-group {
             margin-bottom: 16px;
@@ -153,6 +149,8 @@
             color: var(--text-light);
         }
         .form-group input,
+        .form-group textarea, /* [NEW] */
+        .form-group input[type="file"], /* [NEW] */
         .form-group .input-wrapper {
             width: 100%;
             padding: 14px 16px;
@@ -161,6 +159,18 @@
             border-radius: 12px;
             background-color: var(--bg-light);
         }
+        
+        /* [NEW] Style for file input */
+        .form-group input[type="file"] {
+            padding: 10px 12px;
+            font-size: 0.9rem;
+        }
+        /* [NEW] Style for textarea */
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
         .input-wrapper {
             display: flex;
             align-items: center;
@@ -194,9 +204,15 @@
             place-items: center;
             margin-right: 12px;
             font-size: 1.1rem;
+            /* [NEW] Added for avatar images */
+            overflow: hidden;
+        }
+        .list-item .icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         
-        /* History Feature Specific Colors */
         .list-item .icon.deposit { background-color: #dcfce7; color: var(--primary-green); }
         .list-item .icon.withdraw { background-color: #eff6ff; color: var(--primary-blue); }
         
@@ -218,7 +234,6 @@
             font-weight: 500;
         }
         
-        /* History Status Colors */
         .status.successful, .status.approved { color: var(--primary-green); }
         .status.pending, .status.processing { color: var(--primary-yellow); }
         .status.rejected, .status.cancelled { color: var(--primary-red); }
@@ -236,7 +251,7 @@
             color: var(--text-light);
             cursor: pointer;
             border-bottom: 3px solid transparent;
-            margin-bottom: -1px; /* Overlap border */
+            margin-bottom: -1px;
         }
         .tab-item.active {
             color: var(--primary-green);
@@ -309,7 +324,6 @@
             color: var(--text-dark);
         }
         
-        /* Modal Overlay */
         #modal-overlay {
             display: none;
             position: absolute;
@@ -344,7 +358,6 @@
             top: 40px;
         }
         
-        /* NEW: Error Toast Style */
         .error-toast {
             position: absolute;
             top: 20px;
@@ -368,22 +381,18 @@
         }
 
         /* --- 4. Bottom Navigation --- */
-        /* SOLUTION: Fixed Bottom Nav (Explicitly Fixed) */
         .bottom-nav {
             display: flex;
             height: 70px;
             background-color: var(--bg-white);
             border-top: 1px solid var(--border-color);
             box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.03);
-            
-            /* ADDED: Explicit Fixed Positioning */
             position: fixed;
             bottom: 0;
-            width: 375px; /* Matches .mobile-container width */
+            width: 375px;
             z-index: 1000;
         }
 
-        /* [START] 1. CSS পরিবর্তন: .nav-item এ 'position: relative' যোগ করা হয়েছে */
         .nav-item {
             flex: 1;
             display: flex;
@@ -395,16 +404,15 @@
             font-weight: 500;
             cursor: pointer;
             transition: color 0.2s;
-            position: relative; /* ব্যাজটির অবস্থান ঠিক করার জন্য এটি যোগ করা হয়েছে */
+            position: relative;
         }
-        /* [END] 1. CSS পরিবর্তন */
         
         .nav-item i {
             font-size: 1.3rem;
             margin-bottom: 4px;
         }
         .nav-item.active {
-            color: var(--primary-blue); /* Active nav item color */
+            color: var(--primary-blue);
         }
         .nav-item#nav-tasks .nav-icon {
             background: var(--primary-green);
@@ -424,12 +432,11 @@
             margin-top: 2px;
         }
 
-        /* [START] 2. CSS পরিবর্তন: ব্যাজের অবস্থান ঠিক করা হয়েছে */
         .nav-item .notification-badge {
             position: absolute;
-            top: 10px;          /* Adjusted top position */
-            left: 50%;          /* Position from center */
-            margin-left: 8px;   /* Nudge it right of center */
+            top: 10px;
+            left: 50%;
+            margin-left: 8px;
             background: var(--primary-red);
             color: white;
             font-size: 0.7rem;
@@ -439,16 +446,16 @@
             border-radius: 50%;
             display: grid;
             place-items: center;
-            z-index: 1;         /* Ensure it's on top */
+            z-index: 1;
         }
-        /* [END] 2. CSS পরিবর্তন */
 
-        /* --- 5. Auth Screens (1.jpg) --- */
+        /* --- 5. Auth Screens --- */
         #auth-container {
             display: flex;
             flex-direction: column;
             height: 100%;
             padding: 30px;
+            overflow-y: auto;
         }
         #auth-container .page {
             flex-grow: 1;
@@ -469,18 +476,6 @@
             font-weight: 600;
             text-decoration: none;
         }
-        #auth-container #page-secure-account .password-strength {
-            display: flex;
-            align-items: center;
-            font-size: 0.85rem;
-            color: var(--text-light);
-            margin-top: -8px;
-            margin-bottom: 16px;
-        }
-        #auth-container #page-secure-account .password-strength i {
-            color: var(--primary-green);
-            margin-right: 6px;
-        }
 
         /* --- 6. Main App Container --- */
         #app-container {
@@ -489,15 +484,14 @@
             height: 100%;
         }
         
-        /* SOLUTION 5, 7, 8: Restricted Feature Style */
         .restricted-feature {
             opacity: 0.6;
             cursor: not-allowed !important;
-            pointer-events: auto !important; /* Allow clicks to show toast */
+            pointer-events: auto !important;
         }
 
 
-        /* --- 7. Page: Home (5.jpg, 2.jpg) --- */
+        /* --- 7. Page: Home --- */
         #page-home .home-header {
             display: flex;
             justify-content: space-between;
@@ -517,9 +511,8 @@
             cursor: pointer;
         }
         
-        /* NEW: Verification Prompt Style */
         .verification-prompt {
-            display: none; /* Hidden by default */
+            display: none;
             margin: -4px 16px 16px 16px;
             padding: 12px;
             border-radius: 12px;
@@ -566,7 +559,6 @@
             padding: 0 16px 16px 16px;
         }
         
-        /* --- FIX: Horizontal Display & Overflow (STAT CARDS) --- */
         #page-home .stat-card {
             display: flex;
             align-items: center;
@@ -574,7 +566,7 @@
             padding: 12px;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
-            overflow: hidden; /* Ensures content doesn't break out */
+            overflow: hidden;
         }
         #page-home .stat-card .icon {
             width: 36px;
@@ -594,7 +586,6 @@
         #page-home .stat-card .content .title {
             font-size: 0.8rem;
             color: var(--text-light);
-            /* white-space: nowrap; REMOVED - Fixes horizontal overflow */
             overflow: hidden;
             text-overflow: ellipsis;
         }
@@ -602,7 +593,6 @@
             font-size: 0.95rem;
             font-weight: 600;
         }
-        /* --- END FIX --- */
 
         #page-home .quick-action-row {
             display: flex;
@@ -617,7 +607,6 @@
             text-decoration: none;
             color: var(--text-dark);
         }
-        /* MODIFIED: Reusing existing classes, but changing link/icon */
         #page-home .action-item .icon {
             width: 50px;
             height: 50px;
@@ -631,16 +620,25 @@
             font-size: 0.8rem;
             font-weight: 500;
         }
-        /* New History Button Style - Replacing Earn Now (2nd position) */
+        
+        /* [MODIFIED] Added new colors for quick actions */
+        #page-home .action-item .icon.tasks { 
+            background-color: #f5f3ff; 
+            color: #8b5cf6;
+        }
         #page-home .action-item .icon.history { 
             background-color: #fef2f2; 
             color: var(--primary-red); 
         }
-
-        #page-home .action-item .icon.earn { background-color: #f0fdf4; color: #22c55e; }
-        #page-home .action-item .icon.invite { background-color: #eff6ff; color: #3b82f6; }
-        #page-home .action-item .icon.top-up { background-color: #fffbeb; color: #f59e0b; }
-        #page-home .action-item .icon.withdraw { background-color: #fef2f2; color: #ef4444; }
+        #page-home .action-item .icon.top-up { 
+            background-color: #f0fdf4; 
+            color: var(--primary-green);
+        }
+        #page-home .action-item .icon.leaderboard { 
+            background-color: #fffbeb; 
+            color: var(--primary-yellow);
+        }
+        /* --- */
 
         #page-home .section-title {
             font-size: 1.1rem;
@@ -658,14 +656,11 @@
             text-align: center;
         }
 
-        #page-home .recent-transactions .list-item .amount {
-            color: var(--primary-green);
-        }
         #page-home .recent-transactions .list-item .amount.debit {
             color: var(--primary-red);
         }
 
-        /* --- 8. Page: Deposit/Withdraw (6.jpg, 7.jpg) --- */
+        /* --- 8. Page: Deposit/Withdraw --- */
         #page-deposit, #page-withdraw {
             background-color: var(--bg-white);
         }
@@ -716,22 +711,7 @@
             outline: none;
             width: 100%;
         }
-        .fund-page .amount-input-box .stepper {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-        .fund-page .amount-input-box .stepper button {
-            width: 28px;
-            height: 28px;
-            border: none;
-            background: var(--bg-white);
-            border-radius: 6px;
-            font-size: 1.2rem;
-            color: var(--text-dark);
-            cursor: pointer;
-        }
-
+        
         .fund-page .payment-methods {
             display: flex;
             gap: 12px;
@@ -758,30 +738,13 @@
             height: 35px;
             object-fit: contain;
         }
-
-        .fund-page .form-group .upload-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border: 2px dashed var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-            background: var(--bg-light);
-            color: var(--text-light);
-            text-align: center;
-        }
-        .fund-page .form-group .upload-box i {
-            font-size: 1.8rem;
-            margin-bottom: 8px;
-        }
         
         .fund-page .submit-button {
             padding: 16px;
-            margin-top: auto; /* Pushes button to bottom */
+            margin-top: auto;
         }
         
-        /* --- 9. Page: Refer & Earn (9.jpg) --- */
+        /* --- 9. Page: Refer & Earn (NEW UI) --- */
         #page-refer .refer-header {
             padding: 20px 16px 10px 16px;
         }
@@ -794,6 +757,18 @@
             color: var(--text-light);
         }
         
+        /* [NEW] স্টাইল: রেফারেল কোড/লিঙ্ক বক্সের জন্য */
+        #page-refer .referral-code-box {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-align: center;
+            background: var(--bg-light);
+            padding: 16px;
+            border-radius: 12px;
+            word-break: break-all;
+        }
+
         #page-refer .referral-link-box {
             display: flex;
             background: var(--bg-light);
@@ -818,10 +793,11 @@
             cursor: pointer;
         }
 
+        /* [NEW] স্টাইল: শেয়ার আইকন */
         #page-refer .share-icons {
             display: flex;
             justify-content: space-around;
-            padding: 20px 0;
+            padding: 20px 0 0 0;
         }
         #page-refer .share-icon {
             display: flex;
@@ -845,6 +821,7 @@
         #page-refer .share-icon i.fa-facebook-messenger { background: #00B2FF; }
         #page-refer .share-icon i.fa-facebook { background: #1877F2; }
 
+        /* [NEW] স্টাইল: স্ট্যাটস কার্ড (আগের মতোই) */
         #page-refer .referral-stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -867,50 +844,20 @@
         #page-refer .section-title {
             font-size: 1.1rem;
             font-weight: 600;
-            margin-top: 20px;
             padding-bottom: 10px;
         }
-        #page-refer .recent-invites .list-item .icon {
-            background: none;
-        }
-        #page-refer .recent-invites .list-item .icon img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-        }
-        #page-refer .recent-invites .list-item .details {
-            flex-grow: 1;
-        }
-        #page-refer .recent-invites .list-item .details .name {
-            font-weight: 600;
-        }
-        #page-refer .recent-invites .list-item .details .status-line {
-            font-size: 0.9rem;
-        }
-        #page-refer .recent-invites .list-item .earned {
-            font-weight: 600;
-            color: var(--primary-green);
-            font-size: 0.9rem;
-        }
         
-        #page-refer .bengali-banner {
-            display: flex;
-            align-items: center;
-            background: #fffbeb;
-            border: 1px solid #fde047;
-            padding: 12px;
-            border-radius: 12px;
+        /* [MODIFIED] Renamed .recent-invites to .referral-history */
+        #page-refer .referral-history .list-item .details .name {
+            font-weight: 600;
+        }
+        #page-refer .referral-history .list-item .details .status-line {
             font-size: 0.9rem;
-            font-weight: 500;
-            color: #b45309;
-            margin: 16px 16px 0 16px;
         }
-        #page-refer .bengali-banner i {
-            margin-right: 10px;
-            font-size: 1.2rem;
-        }
+        /* --- End Page: Refer --- */
 
-        /* --- 10. Page: Notifications (10.jpg) --- */
+
+        /* --- 10. Page: Notifications --- */
         #page-notifications .notification-list .card {
             display: flex;
             align-items: center;
@@ -927,11 +874,7 @@
             font-size: 1.2rem;
         }
         #page-notifications .notification-list .card .icon.success { background-color: #dcfce7; color: #22c55e; }
-        #page-notifications .notification-list .card .icon.reward { background-color: #fffbeb; color: #f59e0b; }
         #page-notifications .notification-list .card .icon.info { background-color: #eff6ff; color: #3b82f6; }
-        #page-notifications .notification-list .card .icon.alert { background-color: #fee2e2; color: #ef4444; }
-        #page-notifications .notification-list .card .icon.offer { background-color: #ecfdf5; color: #10b981; }
-        #page-notifications .notification-list .card .icon.reminder { background-color: #faf5ff; color: #a855f7; }
         
         #page-notifications .notification-list .card .content {
             flex-grow: 1;
@@ -949,13 +892,14 @@
             align-self: flex-start;
         }
 
-        /* --- 11. Page: Leaderboard (12.jpg) --- */
+        /* --- 11. Page: Leaderboard --- */
         #page-leaderboard .top-earners {
             display: flex;
             justify-content: center;
             align-items: flex-end;
             gap: 16px;
             padding: 20px;
+            min-height: 150px; /* [NEW] Added min-height for loading */
         }
         #page-leaderboard .earner-card {
             display: flex;
@@ -984,20 +928,13 @@
         #page-leaderboard .earner-card .name {
             font-weight: 600;
             margin-top: 6px;
+            font-size: 0.9rem; /* [NEW] Adjusted size */
         }
         #page-leaderboard .earner-card .earning {
             font-size: 0.9rem;
             color: var(--text-light);
         }
         
-        #page-leaderboard .leaderboard-list .list-item .icon {
-            background: none;
-        }
-        #page-leaderboard .leaderboard-list .list-item .icon img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-        }
         #page-leaderboard .leaderboard-list .list-item .details {
             flex-grow: 1;
         }
@@ -1011,51 +948,18 @@
         #page-leaderboard .leaderboard-list .list-item .amount-col .total {
             font-weight: 600;
         }
-        #page-leaderboard .leaderboard-list .list-item .amount-col .sub {
-            font-size: 0.9rem;
-            color: var(--text-light);
-            text-align: right;
-        }
         
-        #page-leaderboard .section-title {
+        /* [NEW] Leaderboard rank number style */
+        #page-leaderboard .leaderboard-list .list-item .rank-number {
             font-size: 1.1rem;
-            font-weight: 600;
-            padding: 16px 16px 10px 16px;
-        }
-        #page-leaderboard .achievements {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            padding: 0 16px 16px 16px;
-        }
-        #page-leaderboard .achievement-badge {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-        #page-leaderboard .achievement-badge .icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: grid;
-            place-items: center;
-            font-size: 1.8rem;
-            color: white;
-            margin-bottom: 6px;
-        }
-        #page-leaderboard .achievement-badge .icon.unlocked {
-            background: linear-gradient(135deg, #4ade80, #22c55e);
-        }
-        #page-leaderboard .achievement-badge .icon.locked {
-            background: var(--bg-light);
+            font-weight: 700;
             color: var(--text-light);
+            width: 30px;
+            text-align: center;
+            margin-right: 10px;
         }
-        #page-leaderboard .achievement-badge .icon.blue { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
-        #page-leaderboard .achievement-badge .icon.purple { background: linear-gradient(135deg, #c084fc, #a855f7); }
-        #page-leaderboard .achievement-badge .icon.gray { background: linear-gradient(135deg, #e5e7eb, #9ca3af); }
 
-        /* --- 12. Page: Profile (4.jpg) --- */
+        /* --- 12. Page: Profile --- */
         #page-profile {
             background-color: var(--bg-white);
         }
@@ -1119,7 +1023,6 @@
             color: var(--text-light);
         }
 
-        /* Custom Toggle Switch */
         .toggle-switch {
             position: relative;
             display: inline-block;
@@ -1166,7 +1069,7 @@
             margin: 0 16px 16px 16px;
             background: #fffbeb;
             border: 1px solid #fde047;
-            display: none; /* SOLUTION 5: Hidden by default */
+            display: none;
         }
         #page-profile .verification-banner .title {
             display: flex;
@@ -1201,7 +1104,7 @@
             margin: 8px 16px;
         }
 
-        /* --- 13. Page: Join Channels (15.jpg) --- */
+        /* --- 13. Page: Join Channels --- */
         #page-join-channels .channel-list .card {
             display: flex;
             align-items: center;
@@ -1220,7 +1123,6 @@
         }
         #page-join-channels .card .icon.official { background: var(--primary-blue); }
         #page-join-channels .card .icon.tasks { background: var(--primary-green); }
-        #page-join-channels .card .icon.bonus { background: var(--primary-yellow); }
         
         #page-join-channels .channel-list .card .content {
             flex-grow: 1;
@@ -1241,14 +1143,8 @@
             font-weight: 600;
             cursor: pointer;
         }
-        #page-join-channels .footer-text {
-            text-align: center;
-            color: var(--text-light);
-            font-size: 0.9rem;
-            padding: 16px;
-        }
         
-        /* --- 14. Page: Tasks (Placeholder) --- */
+        /* --- 14. Page: Tasks --- */
         #page-tasks .task-list .card {
             display: flex;
             align-items: center;
@@ -1265,9 +1161,11 @@
             font-size: 1.5rem;
             color: white;
         }
+        
+        /* [MODIFIED] New task icon styles */
+        #page-tasks .card .icon.visit { background: #3b82f6; }
         #page-tasks .card .icon.app-install { background: #8b5cf6; }
         #page-tasks .card .icon.watch-ads { background: #ec4899; }
-        #page-tasks .card .icon.quiz { background: #f59e0b; }
         
         #page-tasks .task-list .card .content {
             flex-grow: 1;
@@ -1289,6 +1187,62 @@
             font-weight: 600;
             cursor: pointer;
         }
+        
+        /* [NEW] Style for disabled task button */
+        #page-tasks .card .btn-start:disabled {
+            background: var(--text-light);
+            cursor: not-allowed;
+        }
+        
+        /* --- [NEW] 15. Page: Task Detail --- */
+        #page-task-detail {
+            background-color: var(--bg-white);
+        }
+        #page-task-detail .task-header {
+            padding: 0 16px 16px 16px;
+        }
+        #page-task-detail .task-header .title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        #page-task-detail .task-header .reward {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-green);
+        }
+        
+        #page-task-detail .task-body {
+            padding: 16px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        #page-task-detail .instructions-card {
+            background: var(--bg-light);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+        #page-task-detail .instructions-card .label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+        #page-task-detail .instructions-card .instructions-text {
+            font-size: 1rem;
+            color: var(--text-dark);
+        }
+        
+        #page-task-detail .proof-submission {
+            margin-top: auto; /* Pushes to the bottom */
+        }
+        
+        #page-task-detail .btn-visit-task {
+            margin-bottom: 16px;
+        }
+
 
     </style>
 </head>
@@ -1303,73 +1257,69 @@
                 
                 <div class="form-group">
                     <div class="input-wrapper">
-                        <input type="text" placeholder="Full Name">
+                        <input type="text" placeholder="Full Name" id="reg-name">
                         <i class="fa-regular fa-user"></i>
                     </div>
                 </div>
+                
                 <div class="form-group">
                     <div class="input-wrapper">
-                        <input type="text" placeholder="Mobile Number (11 Digits)" maxlength="11">
+                        <input type="text" placeholder="Mobile Number (11 Digits)" id="reg-phone" maxlength="11">
                         <i class="fa-solid fa-mobile-screen-button"></i>
                     </div>
                 </div>
                 
-                <a href="#" class="btn btn-primary" style="margin-top: 20px;">Next</a>
-                <span style="text-align: center; color: var(--text-light); margin-top: 16px; font-size: 0.9rem;">Step 1 of 2</span>
-            </div>
-            
-            <div class="page" id="page-secure-account">
-                <h2>Secure Your Account</h2>
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <input type="password" placeholder="Create Password (Min 6 chars)" id="reg-pass">
+                        <i class="fa-regular fa-eye-slash"></i>
+                    </div>
+                </div>
                 
                 <div class="form-group">
                     <div class="input-wrapper">
-                        <input type="password" placeholder="Create Password (Min 6 chars)">
+                        <input type="password" placeholder="Confirm Password" id="reg-confirm-pass">
                         <i class="fa-regular fa-eye-slash"></i>
                     </div>
                 </div>
+
                 <div class="form-group">
                     <div class="input-wrapper">
-                        <input type="password" placeholder="Confirm Password">
-                        <i class="fa-regular fa-eye-slash"></i>
-                    </div>
-                </div>
-                <div class="password-strength">
-                    <i class="fa-solid fa-check-circle"></i> Strong
-                </div>
-                <div class="form-group">
-                    <div class="input-wrapper">
-                        <input type="text" placeholder="Referral Code (Optional)">
+                        <input type="text" placeholder="Referral Code (Optional)" id="reg-referral">
                         <i class="fa-regular fa-clipboard"></i>
                     </div>
                 </div>
                 
-                <a href="#" class="btn" style="background-color: #8b5cf6; margin-top: 20px;">Sign Up</a>
-                <span style="text-align: center; color: var(--text-light); margin-top: 16px; font-size: 0.9rem;">Step 2 of 2</span>
+                <a href="#" class="btn btn-primary" style="margin-top: 20px;" id="btn-signup-submit">Sign Up</a>
+
+                <div class="auth-footer">
+                    Already have an account? <a href="#" onclick="showAuthPage('page-login')">Login</a>
+                </div>
             </div>
+            <div class="page" id="page-secure-account"></div>
             
             <div class="page" id="page-login">
                 <h2>Welcome Back!</h2>
                 
                 <div class="form-group">
                     <div class="input-wrapper">
-                        <input type="text" placeholder="Mobile Number" maxlength="11">
+                        <input type="text" placeholder="Mobile Number (11 Digits)" id="login-phone" maxlength="11">
                     </div>
                 </div>
+                
                 <div class="form-group">
                     <div class="input-wrapper">
-                        <input type="password" placeholder="Password / PIN">
+                        <input type="password" placeholder="Password" id="login-pass">
                     </div>
                 </div>
                 
-                <a href="#" class="btn btn-primary" style="margin-top: 20px;">Login</a>
+                <a href="#" class="btn btn-primary" style="margin-top: 20px;" id="btn-login-submit">Login</a>
                 
                 <div class="auth-footer">
-                    Don't have your account? <a href="#" onclick="showAuthPage('page-create-account')">Sign Up</a>
+                    Don't have an account? <a href="#" onclick="showAuthPage('page-create-account')">Sign Up</a>
                 </div>
             </div>
-
-        </div>
-
+            </div>
         <div id="app-container">
             <div class="app-main-content">
 
@@ -1426,7 +1376,7 @@
 
                     <div class="quick-action-row">
                         <a href="#" class="action-item" onclick="showPage('page-tasks')">
-                            <div class="icon invite"><i class="fa-solid fa-list-check"></i></div>
+                            <div class="icon tasks"><i class="fa-solid fa-list-check"></i></div>
                             <div class="label">Tasks</div>
                         </a>
                         <a href="#" class="action-item" onclick="showPage('page-history')">
@@ -1438,7 +1388,7 @@
                             <div class="label">Top-up</div>
                         </a>
                         <a href="#" class="action-item" onclick="showPage('page-leaderboard')">
-                            <div class="icon withdraw"><i class="fa-solid fa-trophy"></i></div>
+                            <div class="icon leaderboard"><i class="fa-solid fa-trophy"></i></div>
                             <div class="label">Leaderboard</div>
                         </a>
                     </div>
@@ -1449,14 +1399,7 @@
 
                     <div class="section-title">Recent Transactions</div>
                     <div class="card recent-transactions" id="recent-transactions-home">
-                        <div class="list-item">
-                            <div class="icon deposit"><i class="fa-solid fa-arrow-up"></i></div>
-                            <div class="content">
-                                <div class="title">No transactions yet</div>
-                                <div class="subtitle">Make a deposit to get started</div>
-                            </div>
                         </div>
-                    </div>
                 </div>
 
                 <div class="page" id="page-history">
@@ -1472,15 +1415,13 @@
                     </div>
 
                     <div class="history-list card" id="full-history-list">
-                        <div style="text-align: center; color: var(--text-light); padding: 20px;">Loading history...</div>
-                    </div>
+                        </div>
                 </div>
                 
                 <div class="page fund-page" id="page-deposit">
                     <div class="page-header">
                         <i class="fa-solid fa-arrow-left back-icon" onclick="showPage('page-home')"></i>
                         <span class="title">Deposit Funds</span>
-                        <i class="fa-solid fa-ellipsis-vertical menu-icon"></i>
                     </div>
 
                     <div class="form-section">
@@ -1488,10 +1429,6 @@
                         <div class="amount-input-box">
                             <span>৳</span>
                             <input type="number" value="500" placeholder="0" id="deposit-amount">
-                            <div class="stepper">
-                                <button><i class="fa-solid fa-plus"></i></button>
-                                <button><i class="fa-solid fa-minus"></i></button>
-                            </div>
                         </div>
                         <div class="limits" style="margin-top: 8px;">Min. ৳50, Max. ৳1000</div>
                     </div>
@@ -1501,7 +1438,16 @@
                         <div class="payment-methods">
                             </div>
                     </div>
-                    
+
+                    <div class="form-section">
+                        <div class="form-group">
+                            <div class="section-label">Center Number (Send Money to this Number)</div>
+                            <div class="input-wrapper" style="background: var(--bg-white);">
+                                <input type="text" placeholder="Select a payment method above" id="deposit-destination-number" readonly style="background: var(--bg-light); color: var(--text-dark); font-weight: 600;">
+                                <i class="fa-regular fa-copy" onclick="copyToClipboard(document.getElementById('deposit-destination-number').value, 'Number Copied!')" style="cursor: pointer; color: var(--primary-blue); padding-right: 5px;"></i>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-section">
                         <div class="form-group">
                             <div class="section-label">Sender Mobile Number</div>
@@ -1522,12 +1468,10 @@
                         <a href="#" class="btn" style="background: #e11d48;">Deposit Now</a>
                     </div>
                 </div>
-                
                 <div class="page fund-page" id="page-withdraw">
                     <div class="page-header">
                         <i class="fa-solid fa-arrow-left back-icon" onclick="showPage('page-home')"></i>
                         <span class="title">Withdraw Funds</span>
-                        <i class="fa-solid fa-ellipsis-vertical menu-icon"></i>
                     </div>
                     
                     <div class="balance-info">
@@ -1548,10 +1492,6 @@
                             <div class="amount-input-box">
                                 <span>৳</span>
                                 <input type="number" placeholder="0" id="withdraw-amount">
-                                <div class="stepper">
-                                    <button><i class="fa-solid fa-plus"></i></button>
-                                    <button><i class="fa-solid fa-minus"></i></button>
-                                </div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -1571,7 +1511,6 @@
                     <div class="page-header" style="padding-bottom: 0;">
                         <i class="fa-solid fa-arrow-left back-icon" onclick="showPage('page-home')"></i>
                         <span class="title">Refer & Earn</span>
-                        <i class="fa-regular fa-copy menu-icon"></i>
                     </div>
 
                     <div class="refer-header">
@@ -1580,65 +1519,44 @@
                     </div>
 
                     <div class="card">
-                        <div class="referral-link-box">
-                            <input type="text" value="https://smartpay.app/register?ref=..." readonly>
-                            <button>Copy</button>
-                        </div>
-                        <div class="share-icons">
-                            <a href="#" class="share-icon">
-                                <i class="fab fa-whatsapp"></i>
-                                <span class="label">WhatsApp</span>
-                            </a>
-                            <a href="#" class="share-icon">
-                                <i class="fab fa-telegram"></i>
-                                <span class="label">Telegram</span>
-                            </a>
-                            <a href="#" class="share-icon">
-                                <i class="fab fa-facebook-messenger"></i>
-                                <span class="label">Messenger</span>
-                            </a>
-                            <a href="#" class="share-icon">
-                                <i class="fab fa-facebook"></i>
-                                <span class="label">Share</span>
-                            </a>
-                        </div>
+                        <div class="section-title" style="padding: 0 0 10px 0;">Your Referral Code</div>
+                        <div id="referral-code-box" class="referral-code-box">
+                            </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="section-title" style="padding: 0 0 16px 0;">Your Shareable Link</div>
+                        <div id="referral-link-container">
+                            </div>
                     </div>
 
                     <div class="card referral-stats">
                         <div class="ref-stat-card">
-                            <div class="label">Your Referrals</div>
-                            <div class="value">0</div>
-                            <div class="label" style="font-size: 0.8rem;">Total Invited</div>
+                            <div class="label">Total Verified Referrals</div>
+                            <div class="value" id="referral-stats-count">0</div>
                         </div>
                         <div class="ref-stat-card">
                             <div class="label">Total Referral Income</div>
-                            <div class="value">৳ 0.00</div>
+                            <div class="value" id="referral-stats-income">৳ 0.00</div>
                         </div>
                     </div>
 
-                    <div class="card recent-invites">
-                        <div class="section-title" style="padding: 0 0 10px 0;">Recent Invites</div>
-                        <div class="list-item">
-                            <div class="icon"><img src="https://i.pravatar.cc/50?img=5" alt="Avatar"></div>
-                            <div class="details">
-                                <div class="name">No invites yet</div>
-                                <div class="status-line"><span class="status pending">Pending</span></div>
-                            </div>
+                    <div class="card">
+                        <div class="ref-stat-card" style="background: none; padding: 0;">
+                            <div class="label" style="color: var(--primary-yellow);"><i class="fa-regular fa-clock"></i> Total Referral Processing</div>
+                            <div class="value" id="referral-stats-processing" style="color: var(--primary-yellow); padding-top: 4px;">0</div>
+                            <div class="label" style="font-size: 0.8rem; padding-top: 2px;">Users not yet verified</div>
                         </div>
                     </div>
 
-                    <div class="bengali-banner">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
-                        <span>অফার চলাকালীন মুহূর্তে তথ্য অতিরিক্ত করুন!</span>
-                    </div>
-
+                    <div class="card referral-history" id="referral-history-list">
+                        <div class="section-title" style="padding: 0 0 10px 0;">Referral History</div>
+                        </div>
                 </div>
-
                 <div class="page" id="page-notifications">
                     <div class="page-header">
                         <i class="fa-solid fa-arrow-left back-icon" onclick="showPage('page-home')"></i>
                         <span class="title">Notifications</span>
-                        <i class="fa-solid fa-ellipsis-vertical menu-icon"></i>
                     </div>
 
                     <div class="tabs">
@@ -1653,7 +1571,7 @@
                 <div class="page" id="page-leaderboard">
                     <div class="page-header">
                         <i class="fa-solid fa-arrow-left back-icon" onclick="showPage('page-home')"></i>
-                        <span class="title">Leaderboard & Badges</span>
+                        <span class="title">Leaderboard</span>
                     </div>
 
                     <div class="tabs">
@@ -1662,80 +1580,18 @@
                     </div>
                     
                     <div class="section-title" style="padding-top: 0;">Monthly Top Earners</div>
+                    
                     <div class="top-earners">
-                        <div class="earner-card rank-2">
-                            <i class="fa-solid fa-crown crown"></i>
-                            <img src="https://i.pravatar.cc/50?img=12" alt="Avatar">
-                            <div class="name">Nisir Ahimd</div>
-                            <div class="earning">৳12,500</div>
                         </div>
-                        <div class="earner-card rank-1">
-                            <i class="fa-solid fa-crown crown"></i>
-                            <img src="https://i.pravatar.cc/50?img=9" alt="Avatar">
-                            <div class="name">Fatema Begum</div>
-                            <div class="earning">৳10,900</div>
-                        </div>
-                    </div>
 
                     <div class="card leaderboard-list">
-                        <div class="list-item">
-                            <div class="icon"><img src="https://i.pravatar.cc/50?img=14" alt="Avatar"></div>
-                            <div class="details">
-                                <div class="name">Asif Ahmed</div>
-                                <div class="reward">Reward: ৳20</div>
-                            </div>
-                            <div class="amount-col">
-                                <div class="total">৳10,000</div>
-                                <div class="sub">৳67,800</div>
-                            </div>
                         </div>
-                        <div class="list-item">
-                            <div class="icon"><img src="https://i.pravatar.cc/50?img=8" alt="Avatar"></div>
-                            <div class="details">
-                                <div class="name">Ahmed Fahim</div>
-                                <div class="reward">Reward: ৳30</div>
-                            </div>
-                            <div class="amount-col">
-                                <div class="total">৳6,1800</div>
-                                <div class="sub">৳6,1000</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="section-title">Achievements</div>
-                    <div class="achievements">
-                        <div class="achievement-badge">
-                            <div class="icon locked"><i class="fa-solid fa-check"></i></div>
-                            <div class="label">First Withdraw</div>
-                        </div>
-                        <div class="achievement-badge">
-                            <div class="icon locked"><i class="fa-solid fa-users"></i></div>
-                            <div class="label">5 Referrals</div>
-                        </div>
-                        <div class="achievement-badge">
-                            <div class="icon locked"><i class="fa-solid fa-list-check"></i></div>
-                            <div class="label">10 Referrals</div>
-                        </div>
-                        <div class="achievement-badge">
-                            <div class="icon locked"><i class="fa-solid fa-calendar-days"></i></div>
-                            <div class="label">10 Tasks Completed</div>
-                        </div>
-                        <div class="achievement-badge">
-                            <div class="icon locked"><i class="fa-solid fa-calendar-check"></i></div>
-                            <div class="label">Daily Streak: 7 Days</div>
-                        </div>
-                        <div class="achievement-badge">
-                            <div class="icon locked"><i class="fa-solid fa-coins"></i></div>
-                            <div class="label">Earn ৳5,000 Total</div>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="page" id="page-profile">
                     <div class="page-header" style="background: var(--bg-light);">
                         <i class="fa-solid fa-arrow-left back-icon" onclick="showPage('page-home')"></i>
                         <span class="title">Profile & Settings</span>
-                        <i class="fa-solid fa-ellipsis-vertical menu-icon"></i>
                     </div>
                     <div style="background: var(--bg-light); padding-bottom: 50px;">
                         <div class="profile-header">
@@ -1752,10 +1608,6 @@
                                     <span>Mobile Number</span>
                                     <i class="fa-solid fa-chevron-down"></i>
                                 </div>
-                                <div class="setting-item">
-                                    <span>Email Address</span>
-                                    <i class="fa-solid fa-chevron-down"></i>
-                                </div>
                             </div>
                         </div>
                         
@@ -1763,40 +1615,21 @@
                             <div class="group-title">Account Settings</div>
                             <div class="setting-card">
                                 <div class="setting-item">
-                                    <span>Language (English/Bangla)</span>
+                                    <span>Language</span>
                                     <i class="fa-solid fa-chevron-right"></i>
                                 </div>
                                 <div class="setting-item">
-                                    <span>In-App Notifications</span>
-                                    <label class="toggle-switch">
-                                        <input type="checkbox">
-                                        <span class="slider"></span>
-                                    </label>
-                                </div>
-                                <div class="setting-item">
-                                    <span>Privacy Visibility</span>
+                                    <span>Notifications</span>
                                     <label class="toggle-switch">
                                         <input type="checkbox" checked>
                                         <span class="slider"></span>
                                     </label>
                                 </div>
-                                <div class="setting-item">
-                                    <span>Privacy Settings</span>
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </div>
                             </div>
                         </div>
                         
                         <div class="verification-banner">
-                            <div class="title">
-                                <span>Your Account is Not Verified!</span>
-                                <i class="fa-solid fa-shield-halved"></i>
                             </div>
-                            <div class="action">
-                                <span><i class="fa-solid fa-triangle-exclamation"></i> Deposit ৳50 Account/PIN</span>
-                                <a href="#" class="btn-verify" onclick="showPage('page-deposit')">Deposit ৳50 to Verify</a>
-                            </div>
-                        </div>
                         
                         <a href="#" class="btn btn-red logout-btn">Log Out</a>
                     </div>
@@ -1810,14 +1643,9 @@
                     </div>
                     
                     <h2 style="padding: 10px 16px 16px 16px; font-size: 1.5rem;">Join Channels</h2>
-                    <p style="padding: 0 16px 20px 16px; font-size: 1.1rem; color: var(--text-light);">Exclusive Channels for You</p>
                     
                     <div class="channel-list">
                         </div>
-                    
-                    <div class="footer-text">
-                        Join to stay updated and earn more!
-                    </div>
                 </div>
                 
                 <div class="page" id="page-tasks">
@@ -1828,6 +1656,38 @@
                     
                     <div class="task-list" style="padding: 0 16px;">
                          </div>
+                </div>
+
+                <div class="page" id="page-task-detail">
+                    <div class="page-header">
+                        <i class="fa-solid fa-arrow-left back-icon" onclick="showPage('page-tasks')"></i>
+                        <span class="title">Task Details</span>
+                    </div>
+                    
+                    <div class="task-header">
+                        <div class="title" id="task-detail-title">Task Name</div>
+                        <div class="reward" id="task-detail-reward">Reward: ৳ 0.00</div>
+                    </div>
+                    
+                    <div class="task-body">
+                        <div class="instructions-card">
+                            <div class="label">Instructions:</div>
+                            <div class="instructions-text" id="task-detail-instructions">
+                                Task instructions will appear here.
+                            </div>
+                        </div>
+                        
+                        <a href="#" class="btn btn-secondary btn-visit-task" id="task-detail-visit-btn">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            Visit Link / Start Task
+                        </a>
+                        
+                        <div class="proof-submission">
+                            <div class="form-group" id="task-detail-proof-box">
+                                </div>
+                            <a href="#" class="btn btn-primary" id="task-detail-submit-btn">Submit for Review</a>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -1870,81 +1730,67 @@
         
         <div id="modal-overlay"></div>
         <div class="confirmation-modal" id="verification-confirmation-modal">
-            <h3>অ্যাকাউন্ট ভেরিফিকেশন</h3>
-            <div class="detail-item">
-                <span>আপনার বর্তমান ব্যালেন্স:</span>
-                <span id="modal-current-balance">৳ 0.00</span>
             </div>
-            <div class="detail-item">
-                <span>ভেরিফিকেশন ফি:</span>
-                <span style="color: var(--primary-red); font-weight: 700;">৳ 50.00</span>
-            </div>
-            <p style="font-size: 0.9rem; color: var(--text-light); text-align: center; margin-top: 16px;">
-                নিশ্চিত করতে ক্লিক করুন আপনার অ্যাকাউন্ট ভেরিফাই করার জন্য।
-            </p>
-            <div class="modal-actions">
-                <button class="btn btn-outline" id="cancel-verification-btn" onclick="hideVerificationModal()">Cancel</button>
-                <button class="btn btn-primary" id="confirm-verification-btn">Confirm Verification</button>
-            </div>
-        </div>
 
-        </div>
+    </div>
 
     <script>
-        // --- 0. Page Navigation (Original) ---
+        // --- 0. Page Navigation ---
         
         const allPages = document.querySelectorAll('.app-main-content .page');
         const navItems = document.querySelectorAll('.bottom-nav .nav-item');
         const authPages = document.querySelectorAll('#auth-container .page');
 
+        // [MODIFIED] Updated showPage to keep Home nav active for sub-pages
+        // [MODIFIED] Added renderLeaderboard() call
         function showPage(pageId) {
-            // Hide all pages
-            allPages.forEach(page => {
-                page.classList.remove('active');
-            });
-            
-            // Show the target page
+            allPages.forEach(page => page.classList.remove('active'));
             const targetPage = document.getElementById(pageId);
             if (targetPage) {
                 targetPage.classList.add('active');
-                // Scroll to top of new page
                 document.querySelector('.app-main-content').scrollTop = 0;
             }
             
-            // Update active nav item
+            // Determine the "root" page for nav highlighting
+            let navDataPage = pageId;
+            // These pages are accessed from Home, so keep Home active
+            if (['page-tasks', 'page-task-detail', 'page-history', 'page-deposit', 'page-withdraw', 'page-leaderboard', 'page-join-channels'].includes(pageId)) {
+                navDataPage = 'page-home'; 
+            }
+            // Special case for the middle button
+            if (pageId === 'page-refer') {
+                navDataPage = 'page-refer';
+            }
+            
             navItems.forEach(item => {
                 item.classList.remove('active');
-                if (item.getAttribute('data-page') === pageId) {
-                    item.classList.add('active');
-                }
-                // Special case for wallet button linking to home
-                if (pageId === 'page-home' && item.getAttribute('data-page') === 'page-home') {
+                if (item.getAttribute('data-page') === navDataPage) {
                     item.classList.add('active');
                 }
             });
 
-            // Special Handler for History Page rendering
             if (pageId === 'page-history') {
                 const user = db.getLoggedInUserData();
-                if (user) {
-                    renderHistoryPage(user);
-                }
-            } else if (pageId === 'page-notifications') { // [START] NOTIFICATION UPDATE
+                if (user) renderHistoryPage(user);
+            } else if (pageId === 'page-notifications') {
                 renderNotificationPage();
                 markNotificationsAsRead();
-            } // [END] NOTIFICATION UPDATE
+            } else if (pageId === 'page-tasks') {
+                // [NEW] Render tasks when page is shown
+                renderTasks();
+            } else if (pageId === 'page-leaderboard') {
+                // [NEW] Render leaderboard when page is shown
+                renderLeaderboard();
+            }
         }
         
         function showAuthPage(pageId) {
-            authPages.forEach(page => {
-                page.classList.remove('active');
-            });
+            authPages.forEach(page => page.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
         }
 
-        // --- 1. UI Interactions (Original) ---
+        // --- 1. UI Interactions (Toasts, Modals) ---
 
-        // Toast for "Copied!"
         function showToast(message) {
             const toast = document.getElementById('toast-copied');
             toast.innerText = message;
@@ -1954,7 +1800,6 @@
             }, 2000);
         }
         
-        // Success Toast for Deposit/Withdraw
         function showSuccessToast(message) {
             const toast = document.getElementById('success-toast');
             document.getElementById('success-toast-message').innerText = message;
@@ -1964,7 +1809,6 @@
             }, 3000);
         }
         
-        // NEW: Error Toast
         function showErrorToast(message) {
             const toast = document.getElementById('error-toast');
             document.getElementById('error-toast-message').innerText = message;
@@ -1974,102 +1818,6 @@
             }, 3000);
         }
         
-        // [START] NOTIFICATION UPDATE: New Helper Functions
-        
-        function getUserNotifications(userPhone) {
-            const allNotifications = db.getNotifications();
-            const readIds = db.getReadNotifications();
-            
-            // Filter notifications for this user or 'all'
-            const userSpecificNotifications = allNotifications.filter(notif => 
-                notif.target === 'all' || notif.target === userPhone
-            );
-            
-            // Map status (read/unread) to each notification
-            return userSpecificNotifications.map(notif => ({
-                ...notif,
-                status: readIds.includes(notif.id) ? 'read' : 'unread'
-            })).sort((a, b) => new Date(b.date) - new Date(a.date)); // Sort newest first
-        }
-
-        function renderNotificationBadge() {
-            const user = db.getLoggedInUserData();
-            if (!user) return;
-            
-            const notifications = getUserNotifications(user.phone);
-            const unreadCount = notifications.filter(n => n.status === 'unread').length;
-            const badge = document.querySelector('.bottom-nav .notification-badge');
-            
-            if (badge) {
-                if (unreadCount > 0) {
-                    badge.innerText = unreadCount;
-                    badge.style.display = 'grid'; // 'grid' is used in CSS
-                } else {
-                    badge.style.display = 'none';
-                }
-            }
-        }
-        
-        function createNotificationItem(notification) {
-            // Use a default icon
-            const iconHtml = '<div class="icon info"><i class="fa-solid fa-bullhorn"></i></div>';
-            
-            // Use existing formatDate function to get time
-            const datePart = new Date(notification.date).toLocaleDateString('en-GB', { 
-                day: '2-digit', month: 'short' 
-            });
-
-            return `
-                <div class="card">
-                    ${iconHtml}
-                    <div class="content">
-                        <div class="title" style="font-weight: ${notification.status === 'unread' ? '600' : '500'};">
-                            ${notification.title}
-                        </div>
-                        <div class="subtitle">${notification.message}</div>
-                    </div>
-                    <div class="time">${datePart}</div>
-                </div>
-            `;
-        }
-
-        function renderNotificationPage() {
-            const user = db.getLoggedInUserData();
-            if (!user) return;
-            
-            const notifications = getUserNotifications(user.phone); // Already sorted
-            const container = document.querySelector('#page-notifications .notification-list');
-            container.innerHTML = ''; // Clear static content
-            
-            if (notifications.length === 0) {
-                container.innerHTML = '<div class="card"><div class="content"><div class="title">No notifications yet.</div><div class="subtitle">Check back later for updates.</div></div></div>';
-                return;
-            }
-            
-            notifications.forEach(notif => {
-                container.innerHTML += createNotificationItem(notif);
-            });
-        }
-        
-        function markNotificationsAsRead() {
-            const user = db.getLoggedInUserData();
-            if (!user) return;
-
-            const notifications = getUserNotifications(user.phone);
-            const unreadIds = notifications.filter(n => n.status === 'unread').map(n => n.id);
-            
-            if (unreadIds.length > 0) {
-                const oldReadIds = db.getReadNotifications();
-                const allReadIds = [...new Set([...oldReadIds, ...unreadIds])];
-                db.saveReadNotifications(allReadIds);
-                
-                // Update badge immediately
-                renderNotificationBadge();
-            }
-        }
-        // [END] NOTIFICATION UPDATE
-
-        // Tab switching (Leaderboard, Notifications)
         function switchTab(clickedTab) {
             const tabsContainer = clickedTab.parentElement;
             tabsContainer.querySelectorAll('.tab-item').forEach(tab => {
@@ -2078,22 +1826,14 @@
             clickedTab.classList.add('active');
         }
 
-        // History Tab switching
         function switchHistoryTab(clickedTab) {
-            const tabsContainer = clickedTab.parentElement;
-            tabsContainer.querySelectorAll('.tab-item').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            clickedTab.classList.add('active');
-
+            switchTab(clickedTab);
             const user = db.getLoggedInUserData();
             if (user) {
                 renderHistoryPage(user, clickedTab.getAttribute('data-history-type'));
             }
         }
 
-
-        // Payment method selection
         function selectPayment(clickedMethod) {
             const methodsContainer = clickedMethod.parentElement;
             methodsContainer.querySelectorAll('.method-card').forEach(method => {
@@ -2102,10 +1842,28 @@
             clickedMethod.classList.add('selected');
         }
         
+        // [NEW] FUNCTION TO HANDLE DEPOSIT METHOD SELECTION
+        function selectDepositMethod(clickedMethod) {
+            // 1. Run the original selection logic
+            selectPayment(clickedMethod); 
+            
+            // 2. Get the destination number from the data attribute
+            const destinationNumber = clickedMethod.dataset.methodNumber;
+            const destinationInput = document.getElementById('deposit-destination-number');
+            
+            if (destinationInput) {
+                if (destinationNumber && destinationNumber !== 'null') {
+                    destinationInput.value = destinationNumber;
+                } else {
+                    destinationInput.value = '';
+                    destinationInput.placeholder = 'No number set for this method.';
+                }
+            }
+        }
+        
         /* ================================================================
-        [START] SOLUTION: SmartPay Wallet - STATE MANAGEMENT & LOGIC
-        ================================================================
-        */
+           [START] JAVASCRIPT LOGIC
+           ================================================================ */
 
         // --- 0. Database Simulation (localStorage) ---
         const db = {
@@ -2116,196 +1874,179 @@
             setCurrentUser: (phone) => localStorage.setItem('smartpay_currentUser', phone),
             logoutUser: () => localStorage.removeItem('smartpay_currentUser'),
             
+            // [START] 3. JS: গ্লোবাল রেফারেল কাউন্টার (Spec 1)
+            // Starts checking from 59999, so the first code generated is 60000
+            getLastReferralCode: () => JSON.parse(localStorage.getItem('smartpay_lastReferralCode')) || 59999,
+            saveLastReferralCode: (code) => localStorage.setItem('smartpay_lastReferralCode', JSON.stringify(code)),
+            // [END] 3. JS: গ্লোবাল রেফারেল কাউন্টার
+            
             getPendingDeposits: () => JSON.parse(localStorage.getItem('smartpay_pendingDeposits')) || [],
             savePendingDeposits: (deposits) => localStorage.setItem('smartpay_pendingDeposits', JSON.stringify(deposits)),
             
             getPendingWithdrawals: () => JSON.parse(localStorage.getItem('smartpay_pendingWithdrawals')) || [],
             savePendingWithdrawals: (withdrawals) => localStorage.setItem('smartpay_pendingWithdrawals', JSON.stringify(withdrawals)),
 
-            // Helper: Get full data object for the logged-in user
             getLoggedInUserData: () => {
                 const currentUserPhone = db.getCurrentUser();
                 if (!currentUserPhone) return null;
-                const users = db.getUsers();
-                return users.find(u => u.phone === currentUserPhone);
+                return db.getUsers().find(u => u.phone === currentUserPhone);
             },
             
-            // Helper: Update data for the logged-in user
             updateLoggedInUserData: (updatedData) => {
                 const currentUserPhone = db.getCurrentUser();
                 if (!currentUserPhone) return;
-                
                 let users = db.getUsers();
-                let userUpdated = false;
-                users = users.map(u => {
-                    if (u.phone === currentUserPhone) {
-                        userUpdated = true;
-                        return { ...u, ...updatedData };
-                    }
-                    return u;
-                });
-                
-                if(userUpdated) {
-                    db.saveUsers(users);
-                }
+                users = users.map(u => u.phone === currentUserPhone ? { ...u, ...updatedData } : u);
+                db.saveUsers(users);
             },
             
-            // --- [START] UPDATED: DB FUNCTIONS TO SYNC WITH ADMIN ---
-            
-            // (App Settings)
             getAppSettings: () => JSON.parse(localStorage.getItem('smartpay_appSettings')) || {
                 appName: 'SmartPay Wallet',
-                logoUrl: 'https://i.imgur.com/g8vXIwY.png',
                 homeBannerText: 'NEW TASK! Earn More Today',
-                referralBonus: 30,
-                verificationCharge: 50
+                referralBonus: 30, // Default bonus
+                verificationCharge: 50 // Default charge
             },
             
-            // (Tasks)
-            getTasks: () => JSON.parse(localStorage.getItem('smartpay_tasks')) || [],
+            // [MODIFIED] getTasks function to include default tasks
+            getTasks: () => {
+                const storedTasks = JSON.parse(localStorage.getItem('smartpay_tasks'));
+                // Check if tasks are already stored
+                if (storedTasks && storedTasks.length > 0) {
+                    return storedTasks;
+                }
+                
+                // If no tasks, create and store default tasks based on user images
+                const defaultTasks = [
+                    { 
+                        id: 'task_visit_1', 
+                        title: 'Visit Link / Join Task', 
+                        instructions: 'Visit the group link, join, and then submit your personal profile link as proof.', 
+                        reward: 10, 
+                        type: 'visit', // Corresponds to image 1
+                        link: 'https://t.me/smartpay_official_channel' // Example link
+                    },
+                    { 
+                        id: 'task_install_1', 
+                        title: 'App Install Task', 
+                        instructions: 'Click the install button, download the app, open it, and submit a screenshot of the app\'s home screen.', 
+                        reward: 20, 
+                        type: 'install', // Corresponds to image 2
+                        link: 'https://play.google.com/store/apps/details?id=com.google.android.apps.tasks' // Example link
+                    },
+                    { 
+                        id: 'task_watch_1', 
+                        title: 'Watch Ad Task', 
+                        instructions: 'Click the watch button, watch the entire video ad, and submit the video\'s "Source Link" or "Share Link" as proof.', 
+                        reward: 30, 
+                        type: 'watch', // Corresponds to image 3
+                        link: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' // Example link
+                    }
+                ];
+                // Save these default tasks to localStorage
+                localStorage.setItem('smartpay_tasks', JSON.stringify(defaultTasks));
+                return defaultTasks;
+            },
             
-            // (Channels)
-            getChannels: () => JSON.parse(localStorage.getItem('smartpay_channels')) || [
-                { id: 1, name: 'SmartPay Official', link: 'https://telegram.org' },
-                { id: 2, name: 'Daily Tasks & Offers', link: 'https://whatsapp.com' },
-                { id: 3, name: 'Mega Referral Bonus', link: 'https://google.com' }
-            ],
-            
-            // (Payment Methods)
-            getPaymentMethods: () => JSON.parse(localStorage.getItem('smartpay_paymentMethods')) || [
-                { id: 'bkash', name: 'Bkash Personal', number: '01234567890', type: 'Personal', enabled: true, logo: 'https://i.imgur.com/g8vXIwY.png' },
-                { id: 'nagad', name: 'Nagad Personal', number: '01234567891', type: 'Personal', enabled: true, logo: 'https://i.imgur.com/gYqg2g7.png' },
-                { id: 'upay', name: 'Upay Personal', number: '01234567892', type: 'Personal', enabled: false, logo: '' },
-                { id: 'rocket', name: 'Rocket Personal', number: '01234567893', type: 'Personal', enabled: true, logo: 'https://i.imgur.com/Fm4uS1r.png' }
-            ],
-            
-            // (Notifications - Mock)
+            getChannels: () => JSON.parse(localStorage.getItem('smartpay_channels')) || [],
+            getPaymentMethods: () => JSON.parse(localStorage.getItem('smartpay_paymentMethods')) || [],
             getNotifications: () => JSON.parse(localStorage.getItem('smartpay_notifications')) || [],
-            saveNotifications: (notifications) => localStorage.setItem('smartpay_notifications', JSON.stringify(notifications)),
-            
-            // [START] NOTIFICATION UPDATE: New DB functions for read status
             getReadNotifications: () => JSON.parse(localStorage.getItem('smartpay_readNotifications')) || [],
             saveReadNotifications: (readIds) => localStorage.setItem('smartpay_readNotifications', JSON.stringify(readIds)),
-            // [END] NOTIFICATION UPDATE
-            // --- [END] UPDATED: DB FUNCTIONS ---
+            
+            // [FIX] Adicionada a função que estava faltando para ler/gravar a fila de tarefas pendentes
+            getPendingTaskSubmissions: () => JSON.parse(localStorage.getItem('smartpay_pendingTasks')) || [],
+            savePendingTaskSubmissions: (tasks) => localStorage.setItem('smartpay_pendingTasks', JSON.stringify(tasks)),
         };
 
         // --- 1. App Initialization ---
         function initializeApp() {
-            // --- [START] NEW: Load App Settings First ---
             const appSettings = db.getAppSettings();
-            // Set App Name in header and browser title
+            
+            // Set app name
             document.title = `${appSettings.appName} - User Panel`;
-            document.querySelector('#page-home .home-header span').innerText = appSettings.appName;
-            document.querySelector('#page-join-channels .page-header .title').innerText = appSettings.appName;
-            // Set Home Banner Text
-            const homeBannerEl = document.querySelector('#page-home .new-task-banner');
-            if (homeBannerEl) {
-                homeBannerEl.innerText = appSettings.homeBannerText;
-            }
-            // --- [END] NEW: Load App Settings ---
+            document.querySelectorAll('.page-header .title, #page-home .home-header span').forEach(el => {
+                if (el.innerText.includes('SmartPay Wallet')) el.innerText = appSettings.appName;
+            });
+            document.querySelector('#page-home .new-task-banner').innerText = appSettings.homeBannerText;
+            
+            // [START] 4. JS: অটো-ফিল লজিক (Spec 3)
+            // This function runs first to capture the URL parameter
+            handleReferralAutoFill();
+            // [END] 4. JS: অটো-ফিল লজিক
 
             let currentUser = db.getLoggedInUserData();
             
             if (currentUser) {
-                
-                // --- START MIGRATION (from isVerified to verificationStatus) ---
-                if (typeof currentUser.isVerified !== 'undefined') {
-                    console.log("Migrating user verification status...");
-                    // Convert to new 'verificationStatus'
-                    currentUser.verificationStatus = currentUser.isVerified ? 'verified' : 'unverified';
-                    delete currentUser.isVerified; // Remove old key
-                    
-                    // Also migrate all other users
-                    let allUsers = db.getUsers().map(u => {
-                        if (typeof u.isVerified !== 'undefined') {
-                            u.verificationStatus = u.isVerified ? 'verified' : 'unverified';
-                            delete u.isVerified;
-                        }
-                        return u;
-                    });
-                    db.saveUsers(allUsers);
-                    
-                    // Re-fetch the current user data after saving
-                    currentUser = db.getLoggedInUserData();
-                } else if (!currentUser.verificationStatus) {
-                    // If no key exists at all, default to unverified
-                    currentUser.verificationStatus = 'unverified';
-                    db.updateLoggedInUserData({ verificationStatus: 'unverified' });
-                }
-                // --- END MIGRATION ---
-
                 // User is logged in
                 document.getElementById('auth-container').style.display = 'none';
                 document.getElementById('app-container').style.display = 'flex';
                 
-                // --- [START] NEW: Pass settings to renderers ---
-                renderDynamicData(currentUser, appSettings); // Pass settings
+                // Render all dynamic data
+                renderDynamicData(currentUser, appSettings);
                 enforceVerification(currentUser.verificationStatus); 
-                
-                // --- NEW: Render dynamic content from Admin Panel ---
                 renderPaymentMethods();
-                renderTasks();
+                renderTasks(); // [MODIFIED] Call renderTasks on init
                 renderChannels();
+                renderNotificationBadge();
                 
-                // [START] NOTIFICATION UPDATE
-                renderNotificationBadge(); // Update badge on app start
-                // [END] NOTIFICATION UPDATE
-                
-                // --- [END] NEW ---
-
                 showPage('page-home');
             } else {
                 // User is logged out
                 document.getElementById('auth-container').style.display = 'flex';
                 document.getElementById('app-container').style.display = 'none';
-                showAuthPage('page-login');
+                
+                // If auto-fill didn't set the page to register, show login page
+                if (!new URLSearchParams(window.location.search).has('ref')) {
+                    showAuthPage('page-login');
+                }
             }
             
-            // Add event listeners for new validation
             setupEventListeners();
         }
         
         // --- 2. Auth Flow (Registration & Login) ---
         
+        // [START] 5. JS: handleRegistration() (Final Version)
+        // [MODIFIED] Added 'submittedTasks: []' to new user object
         function handleRegistration() {
-            // Get values from registration form
-            const name = document.querySelector('#page-create-account input[placeholder*="Full Name"]').value;
-            const phone = document.querySelector('#page-create-account input[placeholder*="Mobile Number"]').value;
-            const pass = document.querySelector('#page-secure-account input[placeholder*="Create Password"]').value;
-            const confirmPass = document.querySelector('#page-secure-account input[placeholder*="Confirm Password"]').value;
-            const referralCode = document.querySelector('#page-secure-account input[placeholder*="Referral Code"]').value;
+            const name = document.getElementById('reg-name').value;
+            const phone = document.getElementById('reg-phone').value;
+            const pass = document.getElementById('reg-pass').value;
+            const confirmPass = document.getElementById('reg-confirm-pass').value;
+            
+            // Spec 4: Get the code from the auto-filled box
+            const usedReferralCode = document.getElementById('reg-referral').value;
 
-            // Validation (Point 2)
-            if (!name || !phone || !pass || !confirmPass) {
-                return alert('Please fill all required fields.');
-            }
-            if (phone.length !== 11 || !/^\d+$/.test(phone)) {
-                return alert('Mobile Number must be 11 digits.');
-            }
-            if (pass.length < 6) {
-                return alert('Password must be at least 6 characters.');
-            }
-            if (pass !== confirmPass) {
-                return alert('Passwords do not match.');
-            }
+            // --- Validation Flow (Spec 9) ---
+            if (!name) { return alert('Please enter your Full Name.'); }
+            if (phone.length !== 11 || !/^\d+$/.test(phone)) { return alert('Mobile number must be 11 digits.'); }
+            if (pass.length < 6) { return alert('Password must be at least 6 characters.'); }
+            if (pass !== confirmPass) { return alert('Password does not match.'); }
 
             let users = db.getUsers();
-            if (users.find(u => u.phone === phone)) {
-                return alert('This phone number is already registered.');
-            }
+            if (users.find(u => u.phone === phone)) { return alert('This phone number is already registered.'); }
 
-            // Create new user (Point 5: unverified by default)
+            // --- [NEW] Spec 1, 5: Code Generation (Global Counter) ---
+            const lastCode = db.getLastReferralCode(); // Get last code (e.g., 59999)
+            const newUserCode = lastCode + 1; // New user's code (e.g., 60000)
+            db.saveLastReferralCode(newUserCode); // Save new last code (e.g., 60000)
+            // --- [END] ---
+
+            // Spec 6: New Data Structure
             const newUser = {
                 name: name,
                 phone: phone,
-                password: pass, // In a real app, hash this!
-                verificationStatus: 'unverified', // UPDATED
+                password: pass,
+                verificationStatus: 'unverified', // [MODIFIED] Starts as unverified
                 balance: 0.0,
-                referralCode: `${name.substring(0, 4).toUpperCase()}${phone.slice(-4)}`,
-                referredBy: referralCode, // Store who referred them
-                referrals: [],
-                transactions: [], // Initialize empty transactions array
+                
+                referralCode: newUserCode, // This user's OWN code
+                referredBy: usedReferralCode || null, // The code they USED to sign up
+                referredUsers: [], // List of users they will refer
+                
+                transactions: [],
+                submittedTasks: [], // [NEW] To track submitted task IDs
+                
                 totalBonus: 0.0,
                 todayIncome: 0.0,
                 pendingWithdraw: 0,
@@ -2314,58 +2055,75 @@
             
             users.push(newUser);
             
-            // (Point 6: Handle referral logic if `referredBy` exists)
-            if (referralCode) {
+            // --- [NEW] Spec 4, 7: Backend Referral Tracking ---
+            if (usedReferralCode) {
                 let referrerFound = false;
                 users = users.map(u => {
-                    if (u.referralCode === referralCode) {
-                        u.referrals.push({ phone: newUser.phone, status: 'pending' });
+                    // Find the user whose code matches the one used
+                    if (u.referralCode && u.referralCode == usedReferralCode) {
+                        if (!u.referredUsers) u.referredUsers = [];
+                        
+                        // Spec 4: Add new user's PHONE (as ID) to referrer's list
+                        u.referredUsers.push(newUser.phone); 
+                        
                         referrerFound = true;
                     }
                     return u;
                 });
-                if(referrerFound) console.log("Referrer found and updated.");
+                if(referrerFound) console.log(`Referral link successful: ${newUser.phone} was referred by code ${usedReferralCode}`);
             }
+            // --- [END] ---
             
-            db.saveUsers(users);
+            db.saveUsers(users); // 3. Save to database
 
-            // Automatically log in the new user
-            db.setCurrentUser(phone);
-            initializeApp(); // Re-initialize the app in a logged-in state
+            // 4. Signup success
+            alert("Account created successfully. Please login.");
+            showAuthPage('page-login');
+            
+            // Clear form
+            document.getElementById('reg-name').value = '';
+            document.getElementById('reg-phone').value = '';
+            document.getElementById('reg-pass').value = '';
+            document.getElementById('reg-confirm-pass').value = '';
+            document.getElementById('reg-referral').value = '';
         }
+        // [END] 5. JS: handleRegistration()
 
+        // [START] 6. JS: handleLogin() (Final Version)
         function handleLogin() {
-            const phone = document.querySelector('#page-login input[placeholder="Mobile Number"]').value;
-            const pass = document.querySelector('#page-login input[placeholder="Password / PIN"]').value;
+            const phone = document.getElementById('login-phone').value;
+            const pass = document.getElementById('login-pass').value;
+            
+            if (phone.length !== 11 || !/^\d+$/.test(phone)) {
+                return alert('Enter a valid 11-digit mobile number.');
+            }
+            if (!pass) {
+                return alert('Please enter your password.');
+            }
 
             const users = db.getUsers();
             const user = users.find(u => u.phone === phone);
 
-            // (Point 2: Validation)
             if (user && user.password === pass) {
-                // Success
                 db.setCurrentUser(phone);
                 initializeApp();
             } else {
-                // Fail
-                alert('Invalid mobile number or password.');
+                alert('Mobile number or password incorrect.');
             }
         }
+        // [END] 6. JS: handleLogin()
             
         function handleLogout() {
             db.logoutUser();
-            // Simple way to reset all state
-            location.reload(); 
+            // Reload the page to clear state and go back to auth
+            location.search = ''; // Clear URL params like ?ref=
         }
         
         // --- 3. Dynamic Data Rendering ---
         
-        // UPDATED: Function now accepts appSettings
         function renderDynamicData(user, appSettings) {
             if (!user) return;
-            if (!appSettings) appSettings = db.getAppSettings(); // Fallback
             
-            // (Point 3 & 4: Replace demo data)
             // Home Page
             document.querySelector('#page-home .balance-amount').innerText = `৳ ${user.balance.toFixed(2)}`;
             document.querySelector('#page-home .quick-stats .stat-card:nth-child(1) .value').innerText = user.pendingWithdraw;
@@ -2373,7 +2131,7 @@
             document.querySelector('#page-home .quick-stats .stat-card:nth-child(3) .value').innerText = `৳ ${user.todayIncome.toFixed(2)}`;
             document.querySelector('#page-home .quick-stats .stat-card:nth-child(4) .value').innerText = `৳ ${user.totalBonus.toFixed(2)}`;
             
-            // NEW: Render Home Page Verification Prompt
+            // Home Page Verification Prompt
             const promptDiv = document.getElementById('home-verification-prompt');
             const promptText = document.getElementById('prompt-text');
             const promptBtn = document.getElementById('prompt-action-btn');
@@ -2391,38 +2149,18 @@
                 promptText.innerText = 'Verification in progress – ২৪ ঘন্টা অপেক্ষা করুন';
                 promptBtn.style.display = 'none';
                 promptDiv.style.display = 'flex';
-                promptDiv.style.background = '#eff6ff'; // Blue for info
+                promptDiv.style.background = '#eff6ff';
                 promptDiv.style.color = 'var(--primary-blue)';
             } else if (user.verificationStatus === 'verified') {
                 promptDiv.style.display = 'none';
             }
 
             // Render recent transactions on Home page
-            const recentTxnContainer = document.getElementById('recent-transactions-home');
-            if (user.transactions.length > 0) {
-                recentTxnContainer.innerHTML = '';
-                // Sort by date descending, then take first 3
-                const recent = user.transactions
-                                 .sort((a, b) => new Date(b.date) - new Date(a.date))
-                                 .slice(0, 3); 
-                recent.forEach(t => {
-                    recentTxnContainer.innerHTML += createHistoryListItem(t);
-                });
-            } else {
-                 recentTxnContainer.innerHTML = `
-                    <div class="list-item">
-                        <div class="icon deposit"><i class="fa-solid fa-arrow-up"></i></div>
-                        <div class="content">
-                            <div class="title">No transactions yet</div>
-                            <div class="subtitle">Make a deposit to get started</div>
-                        </div>
-                    </div>
-                `;
-            }
+            renderHomeTransactions(user);
 
-            // Profile Page (Point 4) - UPDATED
+            // Profile Page
             document.querySelector('#page-profile .profile-header .name').innerText = user.name;
-            document.querySelector('#page-profile .setting-item span').innerText = user.phone; // Show phone
+            document.querySelector('#page-profile .setting-item span').innerText = user.phone;
             const statusEl = document.querySelector('#page-profile .profile-header .status');
             const verificationBanner = document.querySelector('#page-profile .verification-banner');
             
@@ -2437,70 +2175,61 @@
             } else { // unverified
                 statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Unverified`;
                 statusEl.style.color = 'var(--primary-yellow)';
-                // NEW: Update verification banner text with dynamic charge
                 const charge = appSettings.verificationCharge;
-                verificationBanner.querySelector('.action span').innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Deposit ৳${charge} Account/PIN`;
-                verificationBanner.querySelector('.action .btn-verify').innerText = `Deposit ৳${charge} to Verify`;
+                verificationBanner.innerHTML = `
+                    <div class="title">
+                        <span>Your Account is Not Verified!</span>
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <div class="action">
+                        <span><i class="fa-solid fa-triangle-exclamation"></i> Deposit ৳${charge} Account/PIN</span>
+                        <a href="#" class="btn-verify" onclick="showPage('page-deposit')">Deposit ৳${charge} to Verify</a>
+                    </div>`;
                 verificationBanner.style.display = 'block';
             }
             
-            // Refer Page (Point 6)
-            document.querySelector('#page-refer .referral-link-box input').value = `https://smartpay.app/register?ref=${user.referralCode}`;
-            document.querySelector('#page-refer .ref-stat-card:nth-child(1) .value').innerText = user.referrals.length;
-            // UPDATED: Use dynamic bonus from settings
-            const referralIncome = user.referrals.filter(r => r.status === 'completed').length * appSettings.referralBonus; 
-            document.querySelector('#page-refer .ref-stat-card:nth-child(2) .value').innerText = `৳ ${referralIncome.toFixed(2)}`;
+            // [START] 7. JS: Refer Page (Render new UI)
+            renderReferralPage(user, appSettings);
+            // [END] 7. JS: Refer Page
             
             // Withdraw Page
             document.querySelector('#page-withdraw .balance-info .amount').innerText = `৳ ${user.balance.toFixed(2)}`;
         }
         
-        // --- 4. Feature Restriction (Point 5, 7, 8) ---
-        function enforceVerification(verificationStatus) { // UPDATED
-            
-            // Clear all previous restriction handlers to avoid duplicates
+        // --- 4. Feature Restriction ---
+        function enforceVerification(verificationStatus) {
             document.querySelectorAll('.restricted-feature').forEach(el => {
-                el.classList.remove('restricted-feature');
                 const newEl = el.cloneNode(true);
                 el.parentNode.replaceChild(newEl, el);
             });
             
-            // Re-bind original actions (for verified users or to be overridden)
+            // Bind original actions
             document.querySelector('#nav-tasks').onclick = () => showPage('page-refer'); 
             document.querySelector('#page-home .balance-actions .btn-primary').onclick = () => showPage('page-withdraw');
-            
-            // MODIFIED: Select all items linking to page-tasks
             document.querySelectorAll('#page-home .action-item[onclick*="page-tasks"]').forEach(el => {
                 el.onclick = () => showPage('page-tasks');
             });
-            
-            // NEW: History page is always available (not restricted)
             document.querySelector('#page-home .action-item[onclick*="page-history"]').onclick = () => showPage('page-history');
-            
             document.querySelector('#page-home .action-item[onclick*="page-leaderboard"]').onclick = () => showPage('page-leaderboard');
             
-            // NEW: Check for restricted status
             const isRestricted = (verificationStatus === 'unverified' || verificationStatus === 'processing');
-            
-            if (!isRestricted) return; // If verified, we're done.
+            if (!isRestricted) return; // Verified, no restrictions
 
-            // User is UNVERIFIED or PROCESSING, apply restrictions
+            // Apply restrictions
             const restrictedElements = [
-                document.querySelector('#nav-tasks'), // Invite (Bottom Nav)
-                document.querySelector('#page-home .balance-actions .btn-primary'), // Withdraw button
-                ...document.querySelectorAll('#page-home .action-item[onclick*="page-tasks"]'), // Both Task buttons
+                document.querySelector('#nav-tasks'), // Invite
+                document.querySelector('#page-home .balance-actions .btn-primary'), // Withdraw
+                ...document.querySelectorAll('#page-home .action-item[onclick*="page-tasks"]'), // Tasks
                 document.querySelector('#page-home .action-item[onclick*="page-leaderboard"]'), // Leaderboard
             ];
             
             const restrictionHandler = (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                // Show different message if processing
-                if (verificationStatus === 'processing') {
-                     showToast('Verification in progress. Please wait.');
-                } else {
-                     showToast('Please verify your account to use this feature.');
-                }
+                const message = (verificationStatus === 'processing') 
+                    ? 'Verification in progress. Please wait.' 
+                    : 'Please verify your account to use this feature.';
+                showToast(message);
             };
 
             restrictedElements.forEach(el => {
@@ -2511,45 +2240,40 @@
             });
         }
         
-        // --- 5. New/Updated Functionality (Point 6, 9) ---
+        // --- 5. Event Listeners Setup ---
         
+        // [START] 8. JS: setupEventListeners() (Final Version)
         function setupEventListeners() {
-            // (Point 2) Auth Handlers
-            document.querySelector('#page-create-account .btn').onclick = (e) => { 
-                e.preventDefault(); 
-                const phone = document.querySelector('#page-create-account input[placeholder*="Mobile Number"]').value;
-                const name = document.querySelector('#page-create-account input[placeholder*="Full Name"]').value;
-                if (phone.length !== 11 || !/^\d+$/.test(phone)) {
-                    return alert('Mobile Number must be 11 digits.');
-                }
-                if (!name) return alert('Please enter your full name.');
-                showAuthPage('page-secure-account');
-            };
-            document.querySelector('#page-secure-account .btn').onclick = (e) => { e.preventDefault(); handleRegistration(); };
-            document.querySelector('#page-login .btn').onclick = (e) => { e.preventDefault(); handleLogin(); };
-            document.querySelector('#page-profile .logout-btn').onclick = (e) => { e.preventDefault(); handleLogout(); };
+            // Auth Handlers (Spec 1, 2)
+            const btnSignup = document.getElementById('btn-signup-submit');
+            if(btnSignup) btnSignup.onclick = (e) => { e.preventDefault(); handleRegistration(); };
+            
+            const btnLogin = document.getElementById('btn-login-submit');
+            if(btnLogin) btnLogin.onclick = (e) => { e.preventDefault(); handleLogin(); };
+            
+            // App Handlers
+            const btnLogout = document.querySelector('#page-profile .logout-btn');
+            if (btnLogout) btnLogout.onclick = (e) => { e.preventDefault(); handleLogout(); };
 
-            // (Point 6) Referral Copy
-            document.querySelector('#page-refer .referral-link-box button').onclick = (e) => { e.preventDefault(); copyReferralLink(); };
-            document.querySelector('#page-refer .page-header .menu-icon').onclick = (e) => { e.preventDefault(); copyReferralLink(); };
+            const btnDeposit = document.querySelector('#page-deposit .submit-button .btn');
+            if(btnDeposit) btnDeposit.onclick = (e) => { e.preventDefault(); processDepositRequest(); };
             
-            // (Point 9) Deposit/Withdraw Handlers - MODIFIED
-            document.querySelector('#page-deposit .submit-button .btn').onclick = (e) => { e.preventDefault(); processDepositRequest(); };
+            const btnWithdraw = document.querySelector('#page-withdraw .submit-button .btn');
+            if(btnWithdraw) btnWithdraw.onclick = (e) => { e.preventDefault(); processWithdrawRequest(); };
             
-            // *** CHANGED: Pointing to new direct function ***
-            document.querySelector('#page-withdraw .submit-button .btn').onclick = (e) => { e.preventDefault(); processWithdrawRequest(); };
+            // Referral page buttons are bound dynamically in renderReferralPage()
         }
+        // [END] 8. JS: setupEventListeners()
 
-        // --- [START] NEW DYNAMIC RENDERING FUNCTIONS ---
+        // --- 6. Dynamic Content Renderers ---
         
-        // Solves Problem 1 & 2: Renders payment methods from DB
+        // [START] MODIFIED FUNCTION
         function renderPaymentMethods() {
-            const methods = db.getPaymentMethods().filter(m => m.enabled); // Only show enabled methods
-            
-            // Find both container elements
+            const methods = db.getPaymentMethods().filter(m => m.enabled);
             const depositContainer = document.querySelector('#page-deposit .payment-methods');
             const withdrawContainer = document.querySelector('#page-withdraw .payment-methods');
             
+            if (!depositContainer || !withdrawContainer) return;
             depositContainer.innerHTML = '';
             withdrawContainer.innerHTML = '';
             
@@ -2561,39 +2285,67 @@
             }
 
             methods.forEach((method, index) => {
-                // Check for a valid logo. If empty, use text fallback.
-                const logoHtml = (method.logo && method.logo.trim() !== "")
+                const logoHtml = (method.logo)
                     ? `<img src="${method.logo}" alt="${method.name}">` 
-                    : `<span style="font-size: 0.8rem; font-weight: 600; padding: 10px 0;">${method.name}</span>`; // Fallback to text
-                
-                // Select the first one by default
+                    : `<span style="font-size: 0.8rem; font-weight: 600; padding: 10px 0;">${method.name}</span>`;
                 const selectedClass = (index === 0) ? 'selected' : ''; 
                 
-                const methodHtml = `
-                    <div class="method-card ${selectedClass}" onclick="selectPayment(this)" data-method-name="${method.name}">
+                // [MODIFIED] Create different HTML for deposit and withdraw
+                
+                // Deposit method HTML (sends destination number)
+                // We assume the destination number is stored in 'method.number' from admin panel
+                const depositMethodHtml = `
+                    <div class="method-card ${selectedClass}" 
+                         onclick="selectDepositMethod(this)" 
+                         data-method-name="${method.name}"
+                         data-method-number="${method.number || ''}">
                         ${logoHtml}
                     </div>
                 `;
+                depositContainer.innerHTML += depositMethodHtml;
                 
-                depositContainer.innerHTML += methodHtml;
-                withdrawContainer.innerHTML += methodHtml;
+                // Withdraw method HTML (uses original simple select)
+                const withdrawMethodHtml = `
+                    <div class="method-card ${selectedClass}" 
+                         onclick="selectPayment(this)" 
+                         data-method-name="${method.name}">
+                        ${logoHtml}
+                    </div>
+                `;
+                withdrawContainer.innerHTML += withdrawMethodHtml;
             });
-        }
 
-        // NEW: Renders tasks from DB
+            // [NEW] Automatically select the first deposit method to populate the number field
+            const firstMethod = depositContainer.querySelector('.method-card');
+            if (firstMethod) {
+                selectDepositMethod(firstMethod);
+            }
+            
+            // [NEW] Automatically select the first withdraw method
+             const firstWithdrawMethod = withdrawContainer.querySelector('.method-card');
+            if (firstWithdrawMethod) {
+                selectPayment(firstWithdrawMethod);
+            }
+        }
+        // [END] MODIFIED FUNCTION
+
+        // [MODIFIED] renderTasks function to implement new flow
         function renderTasks() {
             const tasks = db.getTasks();
+            const user = db.getLoggedInUserData();
             const container = document.querySelector('#page-tasks .task-list');
-            container.innerHTML = ''; // Clear hardcoded tasks
+            
+            if(!container || !user) return;
+            container.innerHTML = '';
 
             if (tasks.length === 0) {
                 container.innerHTML = '<div class="card"><p style="color: var(--text-light); width: 100%; text-align: center;">No tasks available right now.</p></div>';
                 return;
             }
 
-            // Map task types to icons/colors
+            // Updated styles to match new task types
             const taskStyles = {
-                'link': { icon: 'fa-solid fa-link', color: '#3b82f6' },
+                'visit': { icon: 'fa-solid fa-link', color: '#3b82f6' },
                 'install': { icon: 'fa-solid fa-download', color: '#8b5cf6' },
                 'watch': { icon: 'fa-solid fa-tv', color: '#ec4899' },
                 'default': { icon: 'fa-solid fa-puzzle-piece', color: '#f59e0b' }
@@ -2601,44 +2353,47 @@
 
             tasks.forEach(task => {
                 const style = taskStyles[task.type] || taskStyles['default'];
-                const link = task.description || '#'; // Use description as link
+                // Check if user has already submitted this task
+                const isSubmitted = user.submittedTasks && user.submittedTasks.includes(task.id);
+                
                 container.innerHTML += `
                     <div class="card">
-                        <div class="icon" style="background: ${style.color};">
+                        <div class="icon ${task.type}" style="background: ${style.color};">
                             <i class="${style.icon}"></i>
                         </div>
                         <div class="content">
                             <div class="title">${task.title}</div>
                             <div class="reward">Earn ৳${task.reward.toFixed(2)}</div>
                         </div>
-                        <button class="btn-start" onclick="window.open('${link}', '_blank')">Start</button>
+                        <button class="btn-start" 
+                                onclick="showTaskDetail('${task.id}')" 
+                                ${isSubmitted ? 'disabled' : ''}>
+                            ${isSubmitted ? 'Pending' : 'Start'}
+                        </button>
                     </div>
                 `;
             });
         }
+        // [END] MODIFIED renderTasks
 
-        // NEW: Renders channels from DB
         function renderChannels() {
             const channels = db.getChannels();
             const container = document.querySelector('#page-join-channels .channel-list');
-            container.innerHTML = ''; // Clear hardcoded channels
+            if(!container) return;
+            container.innerHTML = '';
 
             if (channels.length === 0) {
                 container.innerHTML = '<div class="card"><p style="color: var(--text-light); width: 100%; text-align: center;">No channels listed.</p></div>';
                 return;
             }
 
-            // Define icons/colors (can be simple array)
             const channelStyles = [
                 { icon: 'fa-solid fa-dollar-sign', color: 'var(--primary-blue)' },
                 { icon: 'fa-solid fa-check-double', color: 'var(--primary-green)' },
-                { icon: 'fa-solid fa-gift', color: 'var(--primary-yellow)' }
             ];
 
             channels.forEach((channel, index) => {
-                // Cycle through styles
                 const style = channelStyles[index % channelStyles.length]; 
-                
                 container.innerHTML += `
                     <div class="card">
                         <div class="icon" style="background: ${style.color};">
@@ -2653,52 +2408,209 @@
                 `;
             });
         }
-        // --- [END] NEW DYNAMIC RENDERING FUNCTIONS ---
 
+        // [START] 9. JS: নতুন রেফারেল পেজ রেন্ডারার (আপনার লজিক অনুযায়ী আপডেট করা)
+        // [MODIFIED] This function is updated for the new 4-point logic.
+        function renderReferralPage(user, appSettings) {
+            const baseUrl = "https://smartpaywallet.vercel.app/register?ref=";
+            const userCode = user.referralCode; 
+            
+            const codeBox = document.getElementById('referral-code-box');
+            const linkContainer = document.getElementById('referral-link-container');
+            
+            if (!codeBox || !linkContainer) return; // Exit if page elements aren't ready
 
-        function copyReferralLink() {
-            // (Point 6)
-            const linkInput = document.querySelector('#page-refer .referral-link-box input');
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(linkInput.value).then(() => {
-                    showToast('Referral Link Copied!');
-                }).catch(err => {
-                    showToast('Failed to copy.');
-                });
+            if (!userCode) {
+                codeBox.innerHTML = "No code found";
+                linkContainer.innerHTML = "No link found";
+                return;
+            }
+            
+            const fullLink = baseUrl + userCode;
+            const shareText = `Join ${appSettings.appName} & Earn Rewards! ${fullLink}`;
+
+            // Spec 8.A: Show Referral Code
+            codeBox.innerText = userCode;
+
+            // Spec 8.B & 8.C: Show Shareable Link & Buttons
+            // [MODIFIED] Added icon to Copy button as requested
+            linkContainer.innerHTML = `
+                <div class="referral-link-box" style="margin-bottom: 12px;">
+                    <input type="text" value="${fullLink}" readonly>
+                    <button onclick="copyToClipboard('${fullLink}', 'Link Copied!')" style="display: flex; align-items: center; gap: 6px;">
+                        <i class="fa-regular fa-copy"></i>Copy
+                    </button>
+                </div>
+                
+                <div class="share-icons" style="padding: 0; justify-content: flex-start; gap: 16px;">
+                    <a href="https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}" target="_blank" class="share-icon" title="Share on WhatsApp">
+                        <i class="fab fa-whatsapp" style="width: 40px; height: 40px; font-size: 1.5rem; background: #25D366;"></i>
+                    </a>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(fullLink)}" target="_blank" class="share-icon" title="Share on Facebook">
+                        <i class="fab fa-facebook" style="width: 40px; height: 40px; font-size: 1.5rem; background: #1877F2;"></i>
+                    </a>
+                    <a href="https://t.me/share/url?url=${encodeURIComponent(fullLink)}&text=${encodeURIComponent(shareText)}" target="_blank" class="share-icon" title="Share on Telegram">
+                        <i class="fab fa-telegram" style="width: 40px; height: 40px; font-size: 1.5rem; background: #0088cc;"></i>
+                    </a>
+                    <a href="fb-messenger://share/?link=${encodeURIComponent(fullLink)}" target="_blank" class="share-icon" title="Share on Messenger">
+                        <i class="fab fa-facebook-messenger" style="width: 40px; height: 40px; font-size: 1.5rem; background: #00B2FF;"></i>
+                    </a>
+                </div>
+            `;
+            
+            // --- [NEW LOGIC] Calculate Stats based on Verification Status ---
+            const allUsers = db.getUsers();
+            const referredUserPhones = user.referredUsers || [];
+            
+            let totalVerified = 0;
+            let totalProcessing = 0;
+            let totalIncome = 0.0;
+            const referralHistoryDetails = [];
+
+            referredUserPhones.forEach(phone => {
+                const referredUser = allUsers.find(u => u.phone === phone);
+                if (!referredUser) return;
+
+                if (referredUser.verificationStatus === 'verified') {
+                    totalVerified++;
+                    // Note: Bonus is added to balance in admin_approveVerification()
+                    // We calculate the total income here for display
+                    totalIncome += appSettings.referralBonus; 
+                    referralHistoryDetails.push({
+                        name: referredUser.name,
+                        phone: referredUser.phone,
+                        status: 'Verified',
+                        earned: appSettings.referralBonus
+                    });
+                } else {
+                    // Includes 'unverified' and 'processing'
+                    totalProcessing++;
+                    referralHistoryDetails.push({
+                        name: referredUser.name,
+                        phone: referredUser.phone,
+                        status: 'Pending',
+                        earned: 0
+                    });
+                }
+            });
+
+            // 1. Update Stats Dashboard (3 cards)
+            document.getElementById('referral-stats-count').innerText = totalVerified;
+            document.getElementById('referral-stats-income').innerText = `৳ ${totalIncome.toFixed(2)}`;
+            document.getElementById('referral-stats-processing').innerText = totalProcessing;
+            
+            // 2. Render Referral History List
+            const historyContainer = document.getElementById('referral-history-list');
+            historyContainer.innerHTML = '<div class="section-title" style="padding: 0 0 10px 0;">Referral History</div>'; // Reset title
+            
+            if (referralHistoryDetails.length === 0) {
+                historyContainer.innerHTML += `
+                    <div class="list-item" style="opacity: 0.7;">
+                        <div class="content">
+                            <div class="title" style="font-weight: 500;">No invites yet</div>
+                            <div class="subtitle">Share your link to get started!</div>
+                        </div>
+                    </div>`;
             } else {
-                // Fallback
-                linkInput.select();
-                document.execCommand('copy');
-                showToast('Referral Link Copied! (Fallback)');
+                // Show list, most recent first (simulated by reversing the array)
+                referralHistoryDetails.reverse().forEach((item, i) => {
+                    const statusClass = item.status === 'Verified' ? 'successful' : 'pending';
+                    const earnedText = item.status === 'Verified' ? `+ ৳${item.earned.toFixed(2)}` : 'No Earning';
+                    
+                    historyContainer.innerHTML += `
+                    <div class="list-item">
+                        <div class="icon"><img src="https://i.pravatar.cc/50?img=${i+10}" alt="Avatar"></div>
+                        <div class="content">
+                            <div class="title">${item.name || 'Referred User'}</div>
+                            <div class="subtitle">ID: ${item.phone.slice(0, 5)}...${item.phone.slice(-3)}</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="status ${statusClass}">${item.status}</div>
+                            <div class="amount" style="font-size: 0.9rem; color: ${item.status === 'Verified' ? 'var(--primary-green)' : 'var(--text-light)'};">
+                                ${earnedText}
+                            </div>
+                        </div>
+                    </div>`;
+                });
+            }
+        }
+        // [END] 9. JS: নতুন রেফারেল পেজ রেন্ডারার
+        
+        // --- 7. Helper Functions (Copy, Auto-Fill) ---
+        
+        // [START] 10. JS: অটো-ফিল ফাংশন (Spec 3)
+        // This function captures the ?ref=CODE from the URL
+        function handleReferralAutoFill() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const refCode = urlParams.get('ref');
+
+                // If a ref code exists in the URL
+                if (refCode && refCode.trim() !== "") {
+                    const referralInput = document.getElementById('reg-referral');
+                    if (referralInput) {
+                        // Set the value in the registration form
+                        referralInput.value = refCode;
+                        // Disable the field so the user can't change it
+                        referralInput.disabled = true; 
+                        console.log(`Referral code ${refCode} auto-filled.`);
+                        
+                        // Automatically show the registration page
+                        showAuthPage('page-create-account');
+                    }
+                }
+            } catch (e) {
+                console.error("Error handling auto-fill:", e);
+            }
+        }
+        // [END] 10. JS: অটো-ফিল ফাংশন
+
+        // Helper function to copy text to clipboard
+        function copyToClipboard(text, message) {
+             if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast(message || 'Copied!');
+                }).catch(err => console.error('Clipboard copy failed:', err));
+            } else {
+                // Fallback for older browsers
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showToast(message || 'Copied!');
+                } catch (err) {
+                    console.error('Fallback copy failed:', err);
+                }
+                document.body.removeChild(textArea);
             }
         }
         
-        // --- 6. Core App Logic (Modified) ---
         
-        // Helper to format date
+        // --- 8. Core App Logic (Transactions, History) ---
+        
         function formatDate(dateString) {
             const date = new Date(dateString);
             return date.toLocaleDateString('en-GB', { 
-                day: '2-digit', 
-                month: '2-digit', 
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: false
-            }).replace(',', ' ').replace(/\//g, '/').replace(' ', ' ');
+                day: '2-digit', month: '2-digit', year: 'numeric',
+                hour: '2-digit', minute: '2-digit'
+            }).replace(',', ' ');
         }
         
-        // History List Item Renderer
         function createHistoryListItem(t) {
             const isDeposit = t.type === 'Deposit';
             const iconClass = isDeposit ? 'deposit' : 'withdraw';
             const icon = isDeposit ? '<i class="fa-solid fa-arrow-down"></i>' : '<i class="fa-solid fa-arrow-up"></i>';
             const statusClass = t.status.toLowerCase();
             const txnLabel = isDeposit ? 'Sender' : 'Recipient';
-            const txnNumber = t.number;
             const txnId = (t.txid && t.txid !== 'N/A') ? `TXN ID: ${t.txid}` : '';
-            const statusText = t.status;
             
+            // [MODIFIED] Check if it's a deposit to show destination number
+            const destinationHtml = (isDeposit && t.destinationNumber) 
+                ? `<br><span style="font-size: 0.75rem; color: #a0aec0;">To: ${t.destinationNumber}</span>`
+                : '';
+
             return `
                 <div class="list-item">
                     <div class="icon ${iconClass}">${icon}</div>
@@ -2707,9 +2619,10 @@
                             ${t.type} - ৳ ${t.amount.toFixed(2)} 
                         </div>
                         <div class="subtitle">
-                            ${txnLabel}: ${txnNumber} / ${t.method}
+                            ${txnLabel}: ${t.number} / ${t.method}
                             <br>
                             <span style="font-size: 0.75rem; color: var(--text-light);">${txnId}</span>
+                            ${destinationHtml}
                         </div>
                     </div>
                     <div style="text-align: right;">
@@ -2717,25 +2630,45 @@
                             ৳ ${t.amount.toFixed(2)}
                         </div>
                         <div class="status ${statusClass}">
-                            ${statusText}
+                            ${t.status}
                         </div>
                         <div class="subtitle" style="font-size: 0.7rem; margin-top: 2px;">
                             ${formatDate(t.date)}
                         </div>
                     </div>
-                </div>
-            `;
+                </div>`;
+        }
+        
+        function renderHomeTransactions(user) {
+            const container = document.getElementById('recent-transactions-home');
+            if(!container) return;
+            
+            if (user.transactions && user.transactions.length > 0) {
+                container.innerHTML = '';
+                const recent = user.transactions
+                                 .sort((a, b) => new Date(b.date) - new Date(a.date))
+                                 .slice(0, 3); 
+                recent.forEach(t => {
+                    container.innerHTML += createHistoryListItem(t);
+                });
+            } else {
+                 container.innerHTML = `
+                    <div class="list-item">
+                        <div class="icon deposit"><i class="fa-solid fa-arrow-up"></i></div>
+                        <div class="content">
+                            <div class="title">No transactions yet</div>
+                            <div class="subtitle">Make a deposit to get started</div>
+                        </div>
+                    </div>`;
+            }
         }
 
-        // History Page Renderer
         function renderHistoryPage(user, filter = 'all') {
             const container = document.getElementById('full-history-list');
-            const allTransactions = (user.transactions || []).sort((a, b) => new Date(b.date) - new Date(a.date));
+            if(!container) return;
             
-            let filteredTransactions = allTransactions;
-            if (filter !== 'all') {
-                filteredTransactions = allTransactions.filter(t => t.type === filter);
-            }
+            const allTransactions = (user.transactions || []).sort((a, b) => new Date(b.date) - new Date(a.date));
+            let filteredTransactions = (filter === 'all') ? allTransactions : allTransactions.filter(t => t.type === filter);
             
             container.innerHTML = '';
 
@@ -2743,160 +2676,133 @@
                 container.innerHTML = `<div style="text-align: center; color: var(--text-light); padding: 20px;">No ${filter === 'all' ? '' : filter} transactions found.</div>`;
                 return;
             }
-
             filteredTransactions.forEach(t => {
                 container.innerHTML += createHistoryListItem(t);
             });
         }
 
-        // (Point 9) NEW: Direct Deposit Processing (Replaces Modal)
+        // [START] MODIFIED FUNCTION
         function processDepositRequest() {
             let user = db.getLoggedInUserData();
             if (!user) return;
             
-            const settings = db.getAppSettings(); // <-- NEW
-
-            // 1. VALIDATION
             const amount = document.getElementById('deposit-amount').value;
             const senderNumber = document.getElementById('deposit-sender-number').value;
             const txid = document.getElementById('deposit-txid').value;
-            
-            // NEW: Get selected payment method name
             const selectedMethodEl = document.querySelector('#page-deposit .method-card.selected');
             const methodName = selectedMethodEl ? selectedMethodEl.dataset.methodName : null;
             
-            if (!amount || !senderNumber || !txid) {
-                return showErrorToast('Please fill all fields.');
-            }
-            if (!methodName) {
-                return showErrorToast('Please select a payment method.');
-            }
-            if (senderNumber.length !== 11 || !/^\d+$/.test(senderNumber)) {
-                return showErrorToast('Sender Mobile Number must be 11 digits.');
-            }
+            // [NEW] Read the destination number
+            const destinationNumber = document.getElementById('deposit-destination-number').value;
             
-            // [DELETED] No longer need to check for verification amount on deposit
-            // if (user.verificationStatus !== 'verified' && parseFloat(amount) < settings.verificationCharge) { 
-            //      return showErrorToast(`Verification requires a minimum deposit of ৳${settings.verificationCharge}.`);
-            // }
-
-            // 2. PROCESSING
+            // [MODIFIED] Updated validation
+            if (!amount || !senderNumber || !txid) return showErrorToast('Please fill all fields.');
+            if (!destinationNumber) return showErrorToast('Center number is missing. Select a method.');
+            if (!methodName) return showErrorToast('Please select a payment method.');
+            if (senderNumber.length !== 11 || !/^\d+$/.test(senderNumber)) return showErrorToast('Sender Mobile Number must be 11 digits.');
+            
             const newDeposit = {
                 id: `TXID-${Date.now()}`,
                 type: 'Deposit',
                 amount: parseFloat(amount),
-                number: senderNumber,
+                number: senderNumber, // Sender's number
+                destinationNumber: destinationNumber, // [NEW] Admin's number
                 txid: txid,
                 date: new Date().toISOString(),
                 status: 'pending',
-                method: methodName, // <-- UPDATED
+                method: methodName,
                 note: 'Deposit request sent.',
             };
-            let deposits = db.getPendingDeposits();
-            deposits.push(newDeposit);
-            db.savePendingDeposits(deposits);
             
-            // Update user stats and transactions list
-            user = db.getLoggedInUserData(); // Re-fetch user
-            const newPendingCount = (user.pendingDeposit || 0) + 1;
+            db.savePendingDeposits([newDeposit, ...db.getPendingDeposits()]);
+            
+            user = db.getLoggedInUserData(); // Re-fetch
             db.updateLoggedInUserData({ 
-                pendingDeposit: newPendingCount,
+                pendingDeposit: (user.pendingDeposit || 0) + 1,
                 transactions: [newDeposit, ...user.transactions]
             });
             
             showSuccessToast('Deposit Request Sent!');
-
-            // 3. REDIRECT
             setTimeout(() => {
-                initializeApp(); // Re-render all data
+                initializeApp();
                 showPage('page-home');
             }, 1000);
         }
+        // [END] MODIFIED FUNCTION
 
-        // *** NEW FUNCTION: Handles direct withdrawal request ***
         function processWithdrawRequest() {
             let user = db.getLoggedInUserData();
             if (!user) return;
 
-            // 1. VALIDATION (from old showConfirmation function)
             const amount = document.getElementById('withdraw-amount').value;
             const receiverNumber = document.getElementById('withdraw-receiver-number').value;
-            
-            // NEW: Get selected payment method name
             const selectedMethodEl = document.querySelector('#page-withdraw .method-card.selected');
             const methodName = selectedMethodEl ? selectedMethodEl.dataset.methodName : null;
 
-            if (!amount || !receiverNumber) {
-                return showErrorToast('Please fill all fields.');
-            }
-            if (!methodName) {
-                return showErrorToast('Please select a payment method.');
-            }
-            if (receiverNumber.length !== 11 || !/^\d+$/.test(receiverNumber)) {
-                return showErrorToast('Receiver Account Number must be 11 digits.');
-            }
-            if (parseFloat(amount) <= 0) {
-                 return showErrorToast('Amount must be greater than zero.');
-            }
-            if (parseFloat(amount) > user.balance) {
-                return showErrorToast('Insufficient balance.');
-            }
+            if (!amount || !receiverNumber) return showErrorToast('Please fill all fields.');
+            if (!methodName) return showErrorToast('Please select a payment method.');
+            if (receiverNumber.length !== 11 || !/^\d+$/.test(receiverNumber)) return showErrorToast('Receiver Account Number must be 11 digits.');
             
-            // 2. PROCESSING (from old handleConfirm function)
             const amountToWithdraw = parseFloat(amount);
+            if (amountToWithdraw <= 0) return showErrorToast('Amount must be greater than zero.');
+            if (amountToWithdraw > user.balance) return showErrorToast('Insufficient balance.');
+            
             const newWithdrawal = {
                 id: `WID-${Date.now()}`,
                 type: 'Withdraw',
                 amount: amountToWithdraw,
                 number: receiverNumber,
-                txid: 'N/A', // Withdrawals don't have sender TXID
+                txid: 'N/A',
                 date: new Date().toISOString(),
                 status: 'pending',
-                method: methodName, // <-- UPDATED
+                method: methodName,
                 note: 'Withdrawal request sent.',
             };
 
-            let withdrawals = db.getPendingWithdrawals();
-            withdrawals.push(newWithdrawal);
-            db.savePendingWithdrawals(withdrawals);
+            db.savePendingWithdrawals([newWithdrawal, ...db.getPendingWithdrawals()]);
             
-            // Re-fetch user data to ensure we have the latest balance
-            user = db.getLoggedInUserData();
-            
-            // Update user stats and transactions list
-            const newPendingCount = (user.pendingWithdraw || 0) + 1;
+            user = db.getLoggedInUserData(); // Re-fetch
             db.updateLoggedInUserData({ 
-                pendingWithdraw: newPendingCount,
+                pendingWithdraw: (user.pendingWithdraw || 0) + 1,
                 balance: user.balance - amountToWithdraw,
                 transactions: [newWithdrawal, ...user.transactions]
             });
 
             showSuccessToast('Withdrawal Request Sent!');
-            
-            // 3. REDIRECT (from old handleConfirm function)
             setTimeout(() => {
-                initializeApp(); // Re-render all data
+                initializeApp();
                 showPage('page-home');
             }, 1000);
         }
         
-        // --- 7. NEW Verification Modal Logic ---
+        // --- 9. Verification Modal Logic ---
         
         function showVerificationModal(user) {
-            const settings = db.getAppSettings(); // <-- NEW
-            const charge = settings.verificationCharge; // <-- NEW
-
-            document.getElementById('modal-current-balance').innerText = `৳ ${user.balance.toFixed(2)}`;
-            // NEW: Update modal text with dynamic charge
-            document.querySelector('#verification-confirmation-modal .detail-item:nth-child(2) span:last-child').innerText = `৳ ${charge.toFixed(2)}`;
-            document.querySelector('#verification-confirmation-modal .detail-item:nth-child(2) span:last-child').style.color = 'var(--primary-red)';
-            document.querySelector('#verification-confirmation-modal .detail-item:nth-child(2) span:last-child').style.fontWeight = '700';
-
+            const settings = db.getAppSettings();
+            const charge = settings.verificationCharge;
             
-            document.getElementById('verification-confirmation-modal').classList.add('show');
+            const modal = document.getElementById('verification-confirmation-modal');
+            modal.innerHTML = `
+                <h3>অ্যাকাউন্ট ভেরিফিকেশন</h3>
+                <div class="detail-item">
+                    <span>আপনার বর্তমান ব্যালেন্স:</span>
+                    <span id="modal-current-balance">৳ ${user.balance.toFixed(2)}</span>
+                </div>
+                <div class="detail-item">
+                    <span>ভেরিফিকেশন ফি:</span>
+                    <span style="color: var(--primary-red); font-weight: 700;">৳ ${charge.toFixed(2)}</span>
+                </div>
+                <p style="font-size: 0.9rem; color: var(--text-light); text-align: center; margin-top: 16px;">
+                    নিশ্চিত করতে ক্লিক করুন আপনার অ্যাকাউন্ট ভেরিফাই করার জন্য।
+                </p>
+                <div class="modal-actions">
+                    <button class="btn btn-outline" id="cancel-verification-btn">Cancel</button>
+                    <button class="btn btn-primary" id="confirm-verification-btn">Confirm Verification</button>
+                </div>`;
+
+            modal.classList.add('show');
             document.getElementById('modal-overlay').style.display = 'block';
             
-            // Set onclick handlers
             document.getElementById('confirm-verification-btn').onclick = () => handleConfirmVerification(user);
             document.getElementById('cancel-verification-btn').onclick = hideVerificationModal;
             document.getElementById('modal-overlay').onclick = hideVerificationModal;
@@ -2907,164 +2813,428 @@
             document.getElementById('modal-overlay').style.display = 'none';
         }
         
-        // [START] *** UPDATED FUNCTION (NEW LOGIC) ***
         function handleConfirmVerification(user) {
             const settings = db.getAppSettings(); 
             const charge = settings.verificationCharge; 
             
             if (user.balance >= charge) { 
-                // Sufficient balance. DO NOT deduct balance.
                 db.updateLoggedInUserData({ 
-                    // balance: newBalance, // <-- REMOVED (Charge will be deducted on admin approval)
-                    verificationStatus: 'processing' // Just set status to processing
+                    verificationStatus: 'processing' // Send to admin for approval
                 });
                 
                 hideVerificationModal();
-                // Updated success message
                 showSuccessToast('Verification request submitted. Please wait for admin approval.');
-                
-                // Refresh UI
-                initializeApp();
+                initializeApp(); // Refresh UI
             } else {
-                // Insufficient balance
                 hideVerificationModal();
                 showErrorToast('পর্যাপ্ত ব্যালেন্স নেই। দয়া করে ব্যালেন্স যোগ করুন।');
             }
         }
-        // [END] *** UPDATED FUNCTION (NEW LOGIC) ***
         
         
-        // --- 8. Admin Simulation (For testing verification) ---
+        // --- 10. Notification Rendering ---
         
-        // [START] *** UPDATED FUNCTION (NEW LOGIC) ***
+        function getUserNotifications(userPhone) {
+            const allNotifications = db.getNotifications();
+            const readIds = db.getReadNotifications();
+            const userSpecific = allNotifications.filter(n => n.target === 'all' || n.target === userPhone);
+            return userSpecific.map(n => ({
+                ...n,
+                status: readIds.includes(n.id) ? 'read' : 'unread'
+            })).sort((a, b) => new Date(b.date) - new Date(a.date));
+        }
+
+        function renderNotificationBadge() {
+            const user = db.getLoggedInUserData();
+            if (!user) return;
+            const notifications = getUserNotifications(user.phone);
+            const unreadCount = notifications.filter(n => n.status === 'unread').length;
+            const badge = document.querySelector('.bottom-nav .notification-badge');
+            
+            if (badge) {
+                badge.innerText = unreadCount;
+                badge.style.display = (unreadCount > 0) ? 'grid' : 'none';
+            }
+        }
+        
+        function createNotificationItem(notification) {
+            const iconHtml = '<div class="icon info"><i class="fa-solid fa-bullhorn"></i></div>';
+            const datePart = new Date(notification.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+            return `
+                <div class="card">
+                    ${iconHtml}
+                    <div class="content">
+                        <div class="title" style="font-weight: ${notification.status === 'unread' ? '600' : '500'};">
+                            ${notification.title}
+                        </div>
+                        <div class="subtitle">${notification.message}</div>
+                    </div>
+                    <div class="time">${datePart}</div>
+                </div>`;
+        }
+
+        function renderNotificationPage() {
+            const user = db.getLoggedInUserData();
+            if (!user) return;
+            const notifications = getUserNotifications(user.phone);
+            const container = document.querySelector('#page-notifications .notification-list');
+            if(!container) return;
+            
+            container.innerHTML = '';
+            if (notifications.length === 0) {
+                container.innerHTML = '<div class="card"><div class="content"><div class="title">No notifications yet.</div></div></div>';
+                return;
+            }
+            notifications.forEach(notif => container.innerHTML += createNotificationItem(notif));
+        }
+        
+        function markNotificationsAsRead() {
+            const user = db.getLoggedInUserData();
+            if (!user) return;
+            const notifications = getUserNotifications(user.phone);
+            const unreadIds = notifications.filter(n => n.status === 'unread').map(n => n.id);
+            if (unreadIds.length > 0) {
+                db.saveReadNotifications([...new Set([...db.getReadNotifications(), ...unreadIds])]);
+                renderNotificationBadge();
+            }
+        }
+        
+        // --- [NEW] 11. Task Page Logic ---
+        
+        function showTaskDetail(taskId) {
+            const task = db.getTasks().find(t => t.id === taskId);
+            if (!task) {
+                showErrorToast('Task not found.');
+                return;
+            }
+            
+            // Populate the page
+            document.getElementById('task-detail-title').innerText = task.title;
+            document.getElementById('task-detail-instructions').innerText = task.instructions;
+            document.getElementById('task-detail-reward').innerText = `Reward: ৳ ${task.reward.toFixed(2)}`;
+            
+            // Set the "Visit" button action
+            const visitBtn = document.getElementById('task-detail-visit-btn');
+            visitBtn.onclick = () => window.open(task.link, '_blank');
+            if(task.type === 'install') {
+                visitBtn.innerHTML = '<i class="fa-solid fa-download"></i> Install App';
+            } else if (task.type === 'watch') {
+                visitBtn.innerHTML = '<i class="fa-solid fa-play"></i> Watch Now';
+            } else {
+                visitBtn.innerHTML = '<i class="fa-solid fa-arrow-up-right-from-square"></i> Visit Link / Join';
+            }
+
+            // Set the correct proof submission box
+            const proofBoxContainer = document.getElementById('task-detail-proof-box');
+            if (task.type === 'install') {
+                // Image 2: App Install Task (needs screenshot upload)
+                proofBoxContainer.innerHTML = `
+                    <label>Proof Submission Box (Upload Screenshot)</label>
+                    <input type="file" id="task-proof-input" accept="image/*" class="form-group">
+                `;
+            } else {
+                // Image 1 (visit) & 3 (watch ad) both need a link
+                let placeholder = (task.type === 'watch') ? 'Paste Source Link Back' : 'Paste Verizable Link Back';
+                proofBoxContainer.innerHTML = `
+                    <label>Proof Submission Box (Submit Link)</label>
+                    <input type="text" id="task-proof-input" placeholder="${placeholder}" class="form-group">
+                `;
+            }
+            
+            // Set the "Submit" button action
+            document.getElementById('task-detail-submit-btn').onclick = () => submitTaskProof(task.id);
+            
+            // Show the page
+            showPage('page-task-detail');
+        }
+        
+        // [FIX START] Esta função foi totalmente reescrita para corrigir o bug.
+        // Agora, ela envia a submissão para a fila de pendentes do admin ('smartpay_pendingTasks').
+        function submitTaskProof(taskId) {
+            const task = db.getTasks().find(t => t.id === taskId);
+            const proofInput = document.getElementById('task-proof-input');
+            if (!task || !proofInput) return;
+
+            let user = db.getLoggedInUserData();
+            if (!user) return showErrorToast('User not found. Please log in.');
+
+            // Esta função interna contém a lógica para salvar a submissão.
+            // É chamada após a prova (texto ou imagem) ser processada.
+            const processSubmission = (proofData) => {
+                // Pega os dados do usuário novamente para garantir que estão atualizados
+                let currentUser = db.getLoggedInUserData();
+                if (!currentUser) return;
+
+                // 1. Cria o objeto de submissão para o painel do admin
+                const submission = {
+                    id: `sub-${Date.now()}`, // ID de submissão único
+                    taskId: task.id,
+                    taskTitle: task.title,
+                    reward: task.reward,
+                    userPhone: currentUser.phone,
+                    date: new Date().toISOString(),
+                    proof: proofData, // Isso é o link (string) ou os dados da imagem em base64
+                    status: 'pending'
+                };
+
+                // 2. Obtém as tarefas pendentes existentes, adiciona esta
+                const pending = db.getPendingTaskSubmissions();
+                pending.push(submission);
+                db.savePendingTaskSubmissions(pending); // <-- ESTA É A CORREÇÃO CRÍTICA
+
+                // 3. Atualiza os dados locais do usuário para mostrar 'Pending'
+                if (!currentUser.submittedTasks) {
+                    currentUser.submittedTasks = [];
+                }
+                currentUser.submittedTasks.push(task.id);
+                db.updateLoggedInUserData({ submittedTasks: currentUser.submittedTasks });
+
+                // 4. Fornece feedback e redireciona
+                showSuccessToast('Task submitted for review!');
+                console.log(`Task ${task.id} submitted by ${currentUser.phone}. Added to smartpay_pendingTasks.`);
+                showPage('page-tasks');
+            };
+
+            // --- Lida com diferentes tipos de prova ---
+
+            if (task.type === 'install') {
+                // Tarefa de Instalação de App (precisa de upload de screenshot)
+                if (!proofInput.files || proofInput.files.length === 0) {
+                    return showErrorToast('Please upload a screenshot as proof.');
+                }
+                
+                // Converte a imagem para base64 para armazenar no localStorage
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    // reader.result contém a string base64 (ex: "data:image/png;base64,...")
+                    processSubmission(reader.result); 
+                };
+                reader.onerror = () => {
+                    showErrorToast('Failed to read image file.');
+                };
+                reader.readAsDataURL(proofInput.files[0]);
+
+            } else {
+                // Tarefas de Visita ou Assistir (ambas precisam de um link)
+                const proofLink = proofInput.value.trim();
+                if (!proofLink) {
+                    return showErrorToast('Please paste the proof link.');
+                }
+                // Validação de link simples
+                if (!proofLink.startsWith('http://') && !proofLink.startsWith('https://') && !proofLink.includes('.')) {
+                     return showErrorToast('Please enter a valid link (e.g., https://...)');
+                }
+                
+                // Processa com o link de texto como prova
+                processSubmission(proofLink);
+            }
+        }
+        // [FIX END] A função corrigida termina aqui.
+
+        // --- [NEW] 12. Leaderboard Rendering ---
+        function renderLeaderboard() {
+            const topEarnersContainer = document.querySelector('#page-leaderboard .top-earners');
+            const listContainer = document.querySelector('#page-leaderboard .leaderboard-list');
+            if (!topEarnersContainer || !listContainer) return;
+            
+            topEarnersContainer.innerHTML = '';
+            listContainer.innerHTML = '';
+            
+            const users = db.getUsers();
+            if (!users || users.length === 0) {
+                listContainer.innerHTML = '<div style="text-align: center; color: var(--text-light); padding: 20px;">No users found.</div>';
+                return;
+            }
+            
+            // Sort users by balance, descending
+            const sortedUsers = users.sort((a, b) => (b.balance || 0) - (a.balance || 0));
+            
+            const top3 = sortedUsers.slice(0, 3);
+            const rest = sortedUsers.slice(3, 20); // Get next users up to 20
+
+            // Define ranks and styles
+            const ranks = [
+                { rank: 1, class: 'rank-1', crown: 'fa-solid fa-crown', color: '#f59e0b', size: '70px' },
+                { rank: 2, class: 'rank-2', crown: 'fa-solid fa-crown', color: '#a0aec0', size: '60px' },
+                { rank: 3, class: 'rank-3', crown: 'fa-solid fa-crown', color: '#cd7f32', size: '60px' }
+            ];
+            
+            // Find the rank 1, 2, 3 users
+            const rank1User = top3[0];
+            const rank2User = top3[1];
+            const rank3User = top3[2];
+            
+            // Render Top 3 in the correct visual order (2, 1, 3)
+            
+            // Rank 2
+            if (rank2User) {
+                topEarnersContainer.innerHTML += `
+                    <div class="earner-card rank-2">
+                        <i class="fa-solid fa-crown crown"></i>
+                        <img src="https://i.pravatar.cc/50?img=${rank2User.phone.slice(-1)}" alt="Avatar" style="border-color: #a0aec0; width: 60px; height: 60px;">
+                        <div class="name">${rank2User.name}</div>
+                        <div class="earning">৳${(rank2User.balance || 0).toFixed(2)}</div>
+                    </div>
+                `;
+            }
+            
+            // Rank 1
+            if (rank1User) {
+                 topEarnersContainer.innerHTML += `
+                    <div class="earner-card rank-1">
+                        <i class="fa-solid fa-crown crown"></i>
+                        <img src="https://i.pravatar.cc/50?img=${rank1User.phone.slice(-1)}" alt="Avatar" style="border-color: #f59e0b; width: 70px; height: 70px;">
+                        <div class="name">${rank1User.name}</div>
+                        <div class="earning">৳${(rank1User.balance || 0).toFixed(2)}</div>
+                    </div>
+                `;
+            }
+            
+            // Rank 3
+            if (rank3User) {
+                 topEarnersContainer.innerHTML += `
+                    <div class="earner-card rank-3">
+                        <i class="fa-solid fa-crown crown"></i>
+                        <img src="https://i.pravatar.cc/50?img=${rank3User.phone.slice(-1)}" alt="Avatar" style="border-color: #cd7f32; width: 60px; height: 60px;">
+                        <div class="name">${rank3User.name}</div>
+                        <div class="earning">৳${(rank3User.balance || 0).toFixed(2)}</div>
+                    </div>
+                `;
+            }
+
+            // Render ranks 4-20
+            if(rest.length === 0 && top3.length === 0) {
+                 listContainer.innerHTML = '<div style="text-align: center; color: var(--text-light); padding: 20px;">No users found.</div>';
+            } else if (rest.length === 0) {
+                 listContainer.innerHTML = '<div style="text-align: center; color: var(--text-light); padding: 20px 0 0 0;">Only the top 3 are available.</div>';
+            } else {
+                rest.forEach((user, index) => {
+                    const rank = index + 4; // Starts from 4
+                    listContainer.innerHTML += `
+                        <div class="list-item">
+                            <div class="rank-number">${rank}</div>
+                            <div class="icon">
+                                <img src="https://i.pravatar.cc/50?img=${user.phone.slice(-2)}" alt="Avatar">
+                            </div>
+                            <div class="details">
+                                <div class="name">${user.name}</div>
+                                <div class="reward">Phone: 01...${user.phone.slice(-4)}</div>
+                            </div>
+                            <div class="amount-col">
+                                <div class="total">৳${(user.balance || 0).toFixed(2)}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+
+        // --- 13. Admin Simulation (Testing) ---
+        // These functions can be called from the browser console for testing
+        
         function admin_approveDeposit(txid) {
-            console.log(`ADMIN: Attempting to approve TXID: ${txid}`);
+            console.log(`ADMIN: Approving TXID: ${txid}`);
             let deposits = db.getPendingDeposits();
             let users = db.getUsers();
-            const settings = db.getAppSettings(); 
-            
             let deposit = deposits.find(d => d.txid === txid && d.status === 'pending');
-            if (!deposit) return console.log('ADMIN: No pending deposit found with that TXID.');
+            if (!deposit) return console.log('ADMIN: No pending deposit found.');
             
-            // Find the user who made this deposit
             let user = users.find(u => u.transactions.some(t => t.id === deposit.id));
-            if (!user) return console.log('ADMIN: User not found for this deposit.');
+            if (!user) return console.log('ADMIN: User not found.');
 
-            // Update deposit status in main transaction list
-            user.transactions = user.transactions.map(t => {
-                if (t.id === deposit.id && t.type === 'Deposit') {
-                    return { ...t, status: 'approved', note: 'Deposit verified by Admin.' };
-                }
-                return t;
-            });
-
-            // Update deposit status (remove from pending list)
+            user.transactions = user.transactions.map(t => (t.id === deposit.id) ? { ...t, status: 'approved', note: 'Deposit verified.' } : t);
             db.savePendingDeposits(deposits.filter(d => d.id !== deposit.id)); 
-
-            // Update user balance and pending count
             user.balance = (user.balance || 0) + parseFloat(deposit.amount);
             user.pendingDeposit = Math.max(0, (user.pendingDeposit || 0) - 1);
             
-            // [START] *** REMOVED AUTOMATIC VERIFICATION LOGIC ***
-            // (Point 5 & 6: VERIFICATION LOGIC) - UPDATED
-            // UPDATED: Use dynamic verification charge
-            /*
-            if (user.verificationStatus !== 'verified' && parseFloat(deposit.amount) >= settings.verificationCharge) {
-                user.verificationStatus = 'verified'; // UPDATED
-                console.log(`ADMIN: User ${user.phone} is now VERIFIED.`);
-                
-                // (Point 6: AWARD REFERRAL BONUS)
-                if (user.referredBy) {
-                    let referrer = users.find(u => u.referralCode === user.referredBy);
-                    if (referrer) {
-                        const bonus = settings.referralBonus; // <-- UPDATED
-                        referrer.balance = (referrer.balance || 0) + bonus; // <-- UPDATED
-                        referrer.totalBonus = (referrer.totalBonus || 0) + bonus; // <-- UPDATED
-                        referrer.referrals = referrer.referrals.map(r => 
-                            r.phone === user.phone ? { ...r, status: 'completed' } : r
-                        );
-                        console.log(`ADMIN: Awarded ${bonus} bonus to referrer ${referrer.phone}`); // <-- UPDATED
-                    }
-                }
-            }
-            */
-            // [END] *** REMOVED AUTOMATIC VERIFICATION LOGIC ***
-            
             db.saveUsers(users);
             console.log(`ADMIN: Approved deposit for ${user.phone}. New balance: ${user.balance}`);
-            
-            // Refresh app if the approved user is the one logged in
-            if (db.getCurrentUser() === user.phone) {
-                initializeApp();
-            }
+            if (db.getCurrentUser() === user.phone) initializeApp();
         }
-        // [END] *** UPDATED FUNCTION (NEW LOGIC) ***
 
-        // Example mock function for admin approval of withdrawal
         function admin_approveWithdrawal(withdrawalId) {
-            console.log(`ADMIN: Attempting to approve Withdrawal ID: ${withdrawalId}`);
+            console.log(`ADMIN: Approving Withdrawal ID: ${withdrawalId}`);
             let users = db.getUsers();
-            let withdrawals = db.getPendingWithdrawals(); // <-- NEW
-            
-            let user = users.find(u => u.transactions.some(t => t.id === withdrawalId && t.type === 'Withdraw' && t.status === 'pending'));
-            if (!user) return console.log('ADMIN: No pending withdrawal found with that ID.');
+            let withdrawals = db.getPendingWithdrawals();
+            let user = users.find(u => u.transactions.some(t => t.id === withdrawalId && t.status === 'pending'));
+            if (!user) return console.log('ADMIN: No pending withdrawal found.');
 
-            // Update withdrawal status in main transaction list
-            user.transactions = user.transactions.map(t => {
-                if (t.id === withdrawalId && t.type === 'Withdraw') {
-                    return { ...t, status: 'successful', note: 'Payment processed successfully.' };
-                }
-                return t;
-            });
-
-            // Update user pending count
+            user.transactions = user.transactions.map(t => (t.id === withdrawalId) ? { ...t, status: 'successful', note: 'Payment processed.' } : t);
             user.pendingWithdraw = Math.max(0, (user.pendingWithdraw || 0) - 1);
-            
-            db.savePendingWithdrawals(withdrawals.filter(w => w.id !== withdrawalId)); // <-- NEW
+            db.savePendingWithdrawals(withdrawals.filter(w => w.id !== withdrawalId));
             db.saveUsers(users);
             console.log(`ADMIN: Approved withdrawal for ${user.phone}.`);
-            
-            if (db.getCurrentUser() === user.phone) {
-                initializeApp();
-            }
+            if (db.getCurrentUser() === user.phone) initializeApp();
         }
         
-        // NEW: Admin function to approve manual verification
-        // (This function will be moved to admin.html and expanded to deduct charge)
-        function admin_approveVerification(phone) {
+        // [START] **** এই ফাংশনটি সম্পূর্ণ আপডেট করা হয়েছে (আপনার সমাধান) ****
+        // এটি এখন রেফারারের ব্যালেন্স আপডেট করে এবং রিয়েল-টাইম UI রিফ্রেশ করে
+        function admin_approveVerification(phone) { // 'phone' হলো User B (যিনি ভেরিফাই হচ্ছেন) এর ফোন নম্বর
             let users = db.getUsers();
             let userUpdated = false;
             const settings = db.getAppSettings();
             const charge = settings.verificationCharge;
-            
+            let referrerPhone = null; // রেফারারের ফোন নম্বর রাখার জন্য
+            let referrerCode = null; // রেফারারের কোড রাখার জন্য
+
+            // ধাপ ১: User B-কে খুঁজে বের করা এবং ভেরিফাই করা
             users = users.map(u => {
-                if (u.phone === phone && u.verificationStatus === 'processing') {
-                    
-                    // [NEW LOGIC PREVIEW] This check belongs in admin.html
-                    if (u.balance >= charge) {
-                        u.balance -= charge; // Deduct charge
-                        u.verificationStatus = 'verified';
-                        userUpdated = true;
-                        console.log(`ADMIN: Verification approved for ${phone}. Charge deducted.`);
-                        
-                        // [NEW LOGIC PREVIEW] Grant referral bonus logic should also be here
-                        
-                    } else {
-                         console.log(`ADMIN: Verification FAILED for ${phone}. Insufficient balance.`);
+                if (u.phone === phone && u.verificationStatus === 'processing' && u.balance >= charge) {
+                    u.balance -= charge; 
+                    u.verificationStatus = 'verified';
+                    userUpdated = true;
+                    if (u.referredBy) {
+                        referrerCode = u.referredBy; // রেফারারের কোডটি সেভ করি
                     }
+                    console.log(`ADMIN: Verification approved for ${phone}. Charge deducted.`);
                 }
                 return u;
             });
 
+            // ধাপ ২: User A (রেফারার)-কে খুঁজে বের করা এবং ব্যালেন্স আপডেট করা
+            if (userUpdated && referrerCode) {
+                const bonus = settings.referralBonus;
+                let referrerFound = false;
+                
+                console.log(`ADMIN: Trying to find referrer with code: ${referrerCode} (Type: ${typeof referrerCode})`);
+
+                users = users.map(u => {
+                    // [মূল সমাধান] এখানে টাইপ-সেফ তুলনা (type-safe comparison) যোগ করা হয়েছে
+                    if (u.referralCode && u.referralCode.toString() === referrerCode.toString()) {
+                        
+                        console.log(`ADMIN: Referrer ${u.phone} found! Awarding bonus.`);
+                        
+                        // এখানে User A-এর ব্যালেন্স এবং টোটাল বোনাস আপডেট করা হচ্ছে
+                        u.balance = (u.balance || 0) + bonus;
+                        u.totalBonus = (u.totalBonus || 0) + bonus; // হোম পেজের 'Total Bonus' কার্ডের জন্য
+                        
+                        referrerPhone = u.phone; // রিয়েল-টাইম আপডেটের জন্য User A-এর ফোন নম্বর সেভ করি
+                        referrerFound = true;
+                        console.log(`ADMIN: Awarded ৳${bonus} bonus to referrer ${u.phone}. New balance: ${u.balance}`);
+                    }
+                    return u;
+                });
+                
+                if (!referrerFound) console.log(`ADMIN: Referrer code ${referrerCode} found, but no matching referrer user account.`);
+            }
+
+            // ধাপ ৩: ডেটাবেস সেভ করা এবং রিয়েল-টাইম UI রিফ্রেশ
             if (userUpdated) {
-                db.saveUsers(users);
-                if (db.getCurrentUser() === phone) {
-                    initializeApp();
+                db.saveUsers(users); // সমস্ত পরিবর্তন (User A এবং B উভয়ের) সেভ করা হলো
+                
+                const currentUser = db.getCurrentUser();
+                
+                // [রিয়েল-টাইম আপডেট]
+                // যদি বর্তমান লগইন করা ইউজার User B (phone) হন অথবা User A (referrerPhone) হন
+                if (currentUser === phone || currentUser === referrerPhone) {
+                    initializeApp(); // UI রিফ্রেশ করি (পেজ রিলোড ছাড়াই)
                 }
             } else {
-                console.log(`ADMIN: No user found with phone ${phone} in 'processing' state.`);
+                console.log(`ADMIN: No user found with phone ${phone} in 'processing' state or insufficient balance.`);
             }
         }
+        // [END] **** আপডেটেড ফাংশন শেষ ****
         
         function admin_clearAllData() {
             localStorage.clear();
@@ -3073,6 +3243,7 @@
         }
 
         // --- Initial Setup ---
+        // Run the app initialization code when the page is fully loaded
         document.addEventListener('DOMContentLoaded', initializeApp);
 
     </script>
